@@ -7,28 +7,46 @@ import { useState } from 'react';
 
 export default function Home() {
   const [url, setUrl] = useState('');
+  const [result, setResult] = useState('');
 
-  function tempFunction() {
-    alert(url);
+  async function handleSubmit(e: React.FormEvent) {
+    // Prevent default browser action
+    // In this case, it stops page reload and form submission
+    e.preventDefault();
+
+    const res = await fetch('/api/extract', {
+      method: 'POST',
+      // fetch can only send strings (or binary) in the request body
+      // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
+      body: JSON.stringify({ url }),
+    });
+
+    const data = await res.json();
+
+    setResult(data.result);
   }
 
   return (
     <>
       <h1>Recipo</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>
           Enter YouTube Link:
           <input
-            className="border-1 border-solid"
+            className="border border-solid"
             type="text"
-            value={url}
+            value={url} // ** I think it doesn't needed.
             onChange={(e) => setUrl(e.target.value)}
           />
         </label>
-        <button className="border-1 border-solid" onClick={tempFunction}>
+        {/* I used type prop with submit for: */}
+        {/* 1. to use clicking button & pressing enter */}
+        {/* 2. accessibility tools */}
+        <button className="border border-solid" type="submit">
           Enter
         </button>
       </form>
+      <p>{result}</p>
     </>
   );
 }
