@@ -1,13 +1,17 @@
-//page.tsx -> Server Component (data, layout)
-//separate file -> Client Component (input, buttons)
-//Since this project is a simple one, I used 'use client' to make it Client Component
+// ======================================================
+// Main page: handles user input and sends request to API
+// ======================================================
+
+// page.tsx -> Server Component (data, layout)
+// separate file -> Client Component (input, buttons)
+// Since this project is a simple one, I used 'use client' to make it Client Component
 'use client';
 
 import { useState } from 'react';
 
 export default function Home() {
-  const [url, setUrl] = useState('');
-  const [result, setResult] = useState('');
+  const [url, setUrl] = useState(''); // to save url that user enters
+  const [result, setResult] = useState(''); // to save chatgpt result
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
@@ -35,7 +39,7 @@ export default function Home() {
           <input
             className="border border-solid"
             type="text"
-            value={url} // ** I think it doesn't needed.
+            value={url}
             onChange={(e) => setUrl(e.target.value)}
           />
         </label>
