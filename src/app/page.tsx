@@ -12,6 +12,7 @@ import { useState } from 'react';
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState(''); // to save chatgpt result
+  const [language, setLanguage] = useState(''); // to save language option
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
@@ -22,7 +23,7 @@ export default function Home() {
       method: 'POST',
       // fetch can only send strings (or binary) in the request body
       // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ url, language }),
     });
 
     const data = await res.json();
@@ -49,6 +50,11 @@ export default function Home() {
         <button className="border border-solid" type="submit">
           Enter
         </button>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+          <option value="English">English</option>
+          <option value="French">French</option>
+          <option value="Korean">Korean</option>
+        </select>
       </form>
       <p>{result}</p>
     </>

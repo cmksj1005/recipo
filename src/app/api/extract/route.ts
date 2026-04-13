@@ -13,6 +13,25 @@ export async function POST(req: Request) {
     // extract transcript from the youtube video
     // it returns an array of objects
     const transcript = await fetchTranscript(body.url);
+    const { language } = body;
+
+    const instructionForGpt = `
+          Determine whether the provided content contains a cooking recipe.
+
+          - If the content is clearly non-cooking, return N
+          - If the content is a cooking video or likely contains a recipe, extract the best possible recipe from the content
+
+          Ingredients:
+          - ingredient (quantity)
+
+          Instructions:
+          1. Step 1
+          2. Step 2
+
+          Requirements:
+          - Use ${language} only
+          - Do not include extra text
+          `;
     let transcriptTextParts = '';
 
     // concatenate all the texts from the transcript
@@ -21,13 +40,9 @@ export async function POST(req: Request) {
       // Better code: const transcriptTextParts = transcript.map(item => item.text).join(' ');
     }
 
-    console.log(transcriptTextParts);
-
     const response = await client.responses.create({
       model: 'gpt-4o-mini',
-      input:
-        transcriptTextParts +
-        "extract the recipe if this content has it. If not, return 'It is not cook youtube video' Do not return anything else. displayed language should be english",
+      input: transcriptTextParts + instructionForGpt,
     });
 
     return Response.json({
