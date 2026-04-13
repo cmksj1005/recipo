@@ -11,8 +11,14 @@ import { useState } from 'react';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
-  const [result, setResult] = useState(''); // to save chatgpt result
+  const [result, setResult] = useState<Recipe | null>(null); // to save result from chatgpt
   const [language, setLanguage] = useState(''); // to save language option
+
+  type Recipe = {
+    title: string;
+    ingredients: string;
+    instruction: string[];
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
@@ -21,6 +27,9 @@ export default function Home() {
 
     const res = await fetch('/api/extract', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       // fetch can only send strings (or binary) in the request body
       // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
       body: JSON.stringify({ url, language }),
@@ -56,7 +65,23 @@ export default function Home() {
           <option value="Korean">Korean</option>
         </select>
       </form>
-      <p>{result}</p>
+      {result && (
+        <>
+          <h2>{result.title}</h2>
+
+          <h3>Ingredients</h3>
+          <p>{result.ingredients}</p>
+
+          <h3>Instructions</h3>
+          <ol>
+            {result.instruction.map((step, index) => (
+              <li key={index}>
+                {index + 1}. {step}
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
     </>
   );
 }
