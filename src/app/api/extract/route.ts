@@ -84,25 +84,11 @@ export async function POST(req: Request) {
     const recipeIngredients = splitGptAnswer[1];
     const recipeInstruction = splitGptAnswer[2].split('#');
 
-    // console.log('title');
-    // console.log(recipeTitle);
-    // console.log('Ingredients');
-    // console.log(recipeIngredients);
-    // console.log('Instruction');
-    // console.log(recipeInstruction);
-
-    // console.log('------------------------');
-    // for (const item of recipeInstruction) {
-    //   console.log(item);
-    // }
-
     const result = {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
     };
-
-    // console.log(gptAnswer);
 
     return Response.json({
       result,

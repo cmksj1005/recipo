@@ -1,0 +1,9 @@
+.searchBar {
+  width: 500px;
+  height: 40px;
+  border-style: solid 3px grey;
+}
+
+.searchForm {
+  justify-content: center;
+}

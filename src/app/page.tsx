@@ -8,12 +8,14 @@
 'use client';
 
 import { useState } from 'react';
+import styles from './page.module.css';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<Recipe | null>(null); // to save result from chatgpt
   const [language, setLanguage] = useState(''); // to save language option
 
+  // Defined Recipe type for use in state (useState)
   type Recipe = {
     title: string;
     ingredients: string;
@@ -44,27 +46,42 @@ export default function Home() {
     <>
       <h1>Recipo</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Enter YouTube Link:
-          <input
-            className="border border-solid"
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </label>
+        <input
+          className={styles.searchBar}
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+
+        <button type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6 text-gray-400"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </button>
+
         {/* I used type prop with submit for: */}
         {/* 1. to use clicking button & pressing enter */}
         {/* 2. accessibility tools */}
-        <button className="border border-solid" type="submit">
-          Enter
-        </button>
+
         <select value={language} onChange={(e) => setLanguage(e.target.value)}>
           <option value="English">English</option>
           <option value="French">French</option>
           <option value="Korean">Korean</option>
         </select>
       </form>
+      {/* if I don't check whether result exists first, it returns error */}
+      {/* because the result could be null */}
       {result && (
         <>
           <h2>{result.title}</h2>
