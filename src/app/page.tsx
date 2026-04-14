@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <>
       <h1>Recipo</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.searchForm} onSubmit={handleSubmit}>
         <input
           className={styles.searchBar}
           type="text"
@@ -53,14 +53,14 @@ export default function Home() {
           onChange={(e) => setUrl(e.target.value)}
         />
 
-        <button type="submit">
+        <button className={styles.searchButton} type="submit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 text-gray-400"
+            className="size-8 text-gray-400"
           >
             <path
               strokeLinecap="round"
@@ -74,7 +74,11 @@ export default function Home() {
         {/* 1. to use clicking button & pressing enter */}
         {/* 2. accessibility tools */}
 
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <select
+          className={styles.languageSelector}
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
           <option value="English">English</option>
           <option value="French">French</option>
           <option value="Korean">Korean</option>

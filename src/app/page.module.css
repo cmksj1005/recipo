@@ -1,9 +1,27 @@
-.searchBar {
-  width: 500px;
-  height: 40px;
-  border-style: solid 3px grey;
-}
-
 .searchForm {
+  height: 50px;
+  display: flex;
   justify-content: center;
 }
+.searchBar {
+  width: 700px;
+  height: 50px;
+  border: 2px solid grey;
+  border-radius: 30px;
+  padding-left: 20px;
+  padding-right: 140px;
+}
+
+.searchButton {
+  height: 50px;
+  position: absolute;
+  margin-left: 630px;
+}
+
+.languageSelector {
+  height: 50px;
+  position: absolute;
+  margin-left: 510px;
+}
+
+/* Study position & box positioning */
