@@ -96,11 +96,39 @@ export async function POST(req: Request) {
     const recipeIngredients = splitGptAnswer[1];
     const recipeInstruction = splitGptAnswer[2].split('#');
 
+    //Got this from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
+    function youtubeUrlToEmbed(
+      urlString: string | undefined | null,
+    ): string | null | undefined {
+      const template = (v: string) => `https://www.youtube.com/embed/${v}`;
+      if (urlString && URL.canParse(urlString)) {
+        const url = new URL(urlString);
+        // short URL
+        if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
+          return template(
+            url.pathname.startsWith('/')
+              ? url.pathname.substring(1)
+              : url.pathname,
+          );
+        }
+        // regular URL
+        const v = url.searchParams.get('v');
+        if (
+          (url.hostname === 'www.youtube.com' ||
+            url.hostname === 'youtube.com') &&
+          v
+        ) {
+          return template(v);
+        }
+      }
+      return urlString;
+    }
+
     const result = {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
-      embedUrl: 'https://www.youtube.com/embed/KwX_kji54mU',
+      embedUrl: youtubeUrlToEmbed(body.url),
     };
 
     return Response.json({
