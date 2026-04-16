@@ -10,44 +10,9 @@ const client = new OpenAI();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
-    //Got this from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
-    function getVideoId(urlString: string) {
-      if (urlString && URL.canParse(urlString)) {
-        const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
-        // shorts URL
-        if (urlString.includes('/shorts/')) {
-          return body.url.split('/shorts/')[1];
-        }
-        // short version URL
-        if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
-          const videoId: string = url.pathname.startsWith('/')
-            ? url.pathname.substring(1)
-            : url.pathname;
-          return videoId;
-        }
-        // regular version URL
-        const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
-        if (
-          (url.hostname === 'www.youtube.com' ||
-            url.hostname === 'youtube.com') &&
-          v
-        ) {
-          return v;
-        }
-        // if user enters wrong url
-        console.log('Error from getVideoId function');
-      }
-    }
-
-    const youtubeId = getVideoId(body.url);
-
-    // extract transcript from the youtube video
-    // it returns an array of objects
-    const transcript: TranscriptResponse[] = await fetchTranscript(youtubeId);
     const language: string = body.language;
 
-    let transcriptTextParts = '';
+    /// Recipe extraction prompt
     const instructionForGpt = `
           Determine whether the provided content is a cooking-related YouTube transcript.
 
@@ -110,6 +75,44 @@ export async function POST(req: Request) {
           Why are you sometimes use other languages!! Don't do it!!! Use only ${language}!!
           `;
 
+    //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0
+    //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
+    function getVideoId(urlString: string) {
+      if (urlString && URL.canParse(urlString)) {
+        const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
+        // shorts URL
+        if (urlString.includes('/shorts/')) {
+          return body.url.split('/shorts/')[1];
+        }
+        // short version URL
+        if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
+          const videoId: string = url.pathname.startsWith('/')
+            ? url.pathname.substring(1)
+            : url.pathname;
+          return videoId;
+        }
+        // regular version URL
+        const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
+        if (
+          (url.hostname === 'www.youtube.com' ||
+            url.hostname === 'youtube.com') &&
+          v
+        ) {
+          return v;
+        }
+        // if user enters wrong url
+        console.log('Error from getVideoId function');
+      }
+    }
+
+    const videoId = getVideoId(body.url);
+
+    // extract transcript from the youtube video
+    // it returns an array of objects
+    const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
+
+    let transcriptTextParts = '';
+
     // concatenate all the texts from the transcript
     for (const item of transcript) {
       transcriptTextParts += item.text;
@@ -137,7 +140,7 @@ export async function POST(req: Request) {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
-      embedUrl: youtubeUrlToEmbed(youtubeId),
+      embedUrl: youtubeUrlToEmbed(videoId),
     };
 
     return Response.json({
