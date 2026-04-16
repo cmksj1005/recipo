@@ -10,10 +10,41 @@ const client = new OpenAI();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    // const videoId:string =
+
+    //Got this from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
+    function getVideoId(urlString: string) {
+      if (urlString && URL.canParse(urlString)) {
+        const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
+        // shorts URL
+        if (urlString.includes('/shorts/')) {
+          return body.url.split('/shorts/')[1];
+        }
+        // short version URL
+        if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
+          const videoId: string = url.pathname.startsWith('/')
+            ? url.pathname.substring(1)
+            : url.pathname;
+          return videoId;
+        }
+        // regular version URL
+        const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
+        if (
+          (url.hostname === 'www.youtube.com' ||
+            url.hostname === 'youtube.com') &&
+          v
+        ) {
+          return v;
+        }
+        // if user enters wrong url
+        console.log('Error from getVideoId function');
+      }
+    }
+
+    const youtubeId = getVideoId(body.url);
+
     // extract transcript from the youtube video
     // it returns an array of objects
-    const transcript: TranscriptResponse[] = await fetchTranscript(body.url);
+    const transcript: TranscriptResponse[] = await fetchTranscript(youtubeId);
     const language: string = body.language;
 
     let transcriptTextParts = '';
@@ -86,7 +117,7 @@ export async function POST(req: Request) {
     }
 
     const response = await client.responses.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       input: transcriptTextParts + instructionForGpt,
     });
 
@@ -97,70 +128,16 @@ export async function POST(req: Request) {
     const recipeIngredients = splitGptAnswer[1];
     const recipeInstruction = splitGptAnswer[2].split('#');
 
-    function getVideoId(
-      urlString: string | undefined | null,
-    ): string | null | undefined {
-      // shorts URL
-      if (body.url && body.url.includes('youtube.com/shorts/')) {
-        return body.url.split('/shorts/')[1];
-      }
-      if (urlString && URL.canParse(urlString)) {
-        const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
-        // short URL
-        if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
-          const videoId: string = url.pathname.startsWith('/')
-            ? url.pathname.substring(1)
-            : url.pathname;
-          return videoId;
-        }
-        // regular URL
-        const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
-        if (
-          (url.hostname === 'www.youtube.com' ||
-            url.hostname === 'youtube.com') &&
-          v
-        ) {
-          return v;
-        }
-        // if user enters wrong url
-        console.log('Error from getVideoId function');
-      }
+    function youtubeUrlToEmbed(id: string) {
+      const embedUrl = `https://www.youtube.com/embed/${id}`;
+      return embedUrl;
     }
-
-    // //Got this from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
-    // function youtubeUrlToEmbed(
-    //   urlString: string | undefined | null,
-    // ): string | null | undefined {
-    //   const template = (v: string) => `https://www.youtube.com/embed/${v}`;
-    //   if (urlString && URL.canParse(urlString)) {
-    //     const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
-    //     // short URL
-    //     if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
-    //       return template(
-    //         url.pathname.startsWith('/')
-    //           ? url.pathname.substring(1)
-    //           : url.pathname,
-    //       );
-    //     }
-    //     // regular URL
-    //     const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
-    //     if (
-    //       (url.hostname === 'www.youtube.com' ||
-    //         url.hostname === 'youtube.com') &&
-    //       v
-    //     ) {
-    //       return template(v);
-    //     }
-    //   }
-    //   return urlString;
-    // }
 
     const result = {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
-      // embedUrl: youtubeUrlToEmbed(body.url),
-      embedUrl: 'https://www.youtube.com/embed/J4u8cK9FvzM',
+      embedUrl: youtubeUrlToEmbed(youtubeId),
     };
 
     return Response.json({
