@@ -102,7 +102,7 @@ export async function POST(req: Request) {
     ): string | null | undefined {
       const template = (v: string) => `https://www.youtube.com/embed/${v}`;
       if (urlString && URL.canParse(urlString)) {
-        const url = new URL(urlString);
+        const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
         // short URL
         if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
           return template(
@@ -112,7 +112,7 @@ export async function POST(req: Request) {
           );
         }
         // regular URL
-        const v = url.searchParams.get('v');
+        const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
         if (
           (url.hostname === 'www.youtube.com' ||
             url.hostname === 'youtube.com') &&
@@ -128,7 +128,8 @@ export async function POST(req: Request) {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
-      embedUrl: youtubeUrlToEmbed(body.url),
+      // embedUrl: youtubeUrlToEmbed(body.url),
+      embedUrl: 'https://www.youtube.com/embed/J4u8cK9FvzM',
     };
 
     return Response.json({
