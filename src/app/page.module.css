@@ -1,7 +1,10 @@
-.searchForm {
+.searchbarForm {
   height: 50px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  position: relative;
 }
 .searchBar {
   width: 700px;
@@ -12,16 +15,19 @@
   padding-right: 140px;
 }
 
-.searchButton {
-  height: 50px;
-  position: absolute;
-  margin-left: 630px;
-}
-
-.languageSelector {
-  height: 50px;
+.languageSelectorContainer {
   position: absolute;
   margin-left: 510px;
 }
 
-/* Study position & box positioning */
+.searchButtonContainer {
+  position: absolute;
+  margin-left: 630px;
+  height: 50px;
+}
+
+.submitButton,
+.languageSelector {
+  cursor: pointer;
+  height: 50px;
+}

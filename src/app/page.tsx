@@ -20,6 +20,7 @@ export default function Home() {
     title: string;
     ingredients: string;
     instruction: string[];
+    embedUrl: string;
   };
 
   async function handleSubmit(e: React.FormEvent) {
@@ -45,50 +46,58 @@ export default function Home() {
   return (
     <>
       <h1>Recipo</h1>
-      <form className={styles.searchForm} onSubmit={handleSubmit}>
+      <form className={styles.searchbarForm} onSubmit={handleSubmit}>
+        {/* search bar */}
         <input
           className={styles.searchBar}
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
-
-        <button className={styles.searchButton} type="submit">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-8 text-gray-400"
+        {/* search button */}
+        <div className={styles.searchButtonContainer}>
+          <button className={styles.submitButton} type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-8 text-gray-400"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
+          </button>
+        </div>
+        {/* language selector */}
+        <div className={styles.languageSelectorContainer}>
+          <select
+            className={styles.languageSelector}
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-        </button>
-
-        {/* I used type prop with submit for: */}
-        {/* 1. to use clicking button & pressing enter */}
-        {/* 2. accessibility tools */}
-
-        <select
-          className={styles.languageSelector}
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          <option value="English">English</option>
-          <option value="French">French</option>
-          <option value="Korean">Korean</option>
-        </select>
+            <option value="English">English</option>
+            <option value="French">French</option>
+            <option value="Korean">Korean</option>
+          </select>
+        </div>
       </form>
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
       {result && (
         <>
           <h2>{result.title}</h2>
+
+          <iframe
+            src={result.embedUrl}
+            width="560"
+            height="315"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          ></iframe>
 
           <h3>Ingredients</h3>
           <p>{result.ingredients}</p>

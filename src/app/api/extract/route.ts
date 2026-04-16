@@ -13,11 +13,13 @@ export async function POST(req: Request) {
     // extract transcript from the youtube video
     // it returns an array of objects
     const transcript = await fetchTranscript(body.url);
-    const { language } = body;
+    const language = body.language;
 
     let transcriptTextParts = '';
     const instructionForGpt = `
           Determine whether the provided content is a cooking-related YouTube transcript.
+
+          Use ${language} only when you answer
 
           Decision Rules:
           - Return only "N" if the content is clearly NOT related to cooking or food preparation.
@@ -28,6 +30,8 @@ export async function POST(req: Request) {
 
           Output Format:
           title|ingredient1 (quantity), ingredient2 (quantity), ingredient3 (quantity)|step1. step2. step3.
+
+          Use ${language} only when you answer
 
           Formatting Rules:
           - Use exactly TWO "|" delimiters:
@@ -50,6 +54,8 @@ export async function POST(req: Request) {
           - Do NOT invent a completely unrelated recipe.
           - Follow the transcript structure as much as possible.
 
+          Use ${language} only when you answer
+
           Detail Requirements:
           - Include realistic ingredient quantities (e.g., 10g, 1 tbsp, 2 cups).
           - Include cooking time when applicable (e.g., 10 minutes, until browned).
@@ -64,6 +70,12 @@ export async function POST(req: Request) {
 
           Example Format (structure only, not content, language should be ${language}}):
           Honey Chicken|Chicken (500g), Salt (1 tsp), Oil (2 tbsp)|Season the chicken with salt.#Heat oil over medium heat for 5 minutes.#Fry the chicken for 10 minutes until golden.
+          
+          Use ${language} only when you answer
+
+          When you answer, do not use other languages. You must use ${language} only!!
+
+          Why are you sometimes use other languages!! Don't do it!!! Use only ${language}!!
           `;
 
     // concatenate all the texts from the transcript
@@ -88,6 +100,7 @@ export async function POST(req: Request) {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
+      embedUrl: 'https://www.youtube.com/embed/KwX_kji54mU',
     };
 
     return Response.json({
