@@ -119,6 +119,7 @@ export async function POST(req: Request) {
       // Better code: const transcriptTextParts = transcript.map(item => item.text).join(' ');
     }
 
+    // get answer from chatgpt
     const response = await client.responses.create({
       model: 'gpt-4o',
       input: transcriptTextParts + instructionForGpt,
@@ -131,6 +132,7 @@ export async function POST(req: Request) {
     const recipeIngredients = splitGptAnswer[1];
     const recipeInstruction = splitGptAnswer[2].split('#');
 
+    // get embed url
     function youtubeUrlToEmbed(id: string) {
       const embedUrl = `https://www.youtube.com/embed/${id}`;
       return embedUrl;
