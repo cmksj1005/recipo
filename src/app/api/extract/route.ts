@@ -10,7 +10,6 @@ const client = new OpenAI();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    // const language: string = body.language;
 
     /// Recipe extraction prompt
     const instructionForGpt = `

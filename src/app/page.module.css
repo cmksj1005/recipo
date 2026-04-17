@@ -15,11 +15,6 @@
   padding-right: 140px;
 }
 
-/* .languageSelectorContainer {
-  position: absolute;
-  margin-left: 510px;
-} */
-
 .searchButtonContainer {
   position: absolute;
   margin-left: 630px;
@@ -32,11 +27,8 @@
   height: 50px;
 }
 
-.recipeVideo {
-  text-align: center;
-}
-
-.recipeTitle {
-  text-align: center;
-  font-size: 30px;
+.VideoContainer {
+  margin: 70px;
+  display: flex;
+  justify-content: center;
 }

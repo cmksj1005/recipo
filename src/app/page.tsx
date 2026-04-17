@@ -13,7 +13,6 @@ import styles from './page.module.css';
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<Recipe | null>(null); // to save result from chatgpt
-  // const [language, setLanguage] = useState(''); // to save language option
 
   // Defined Recipe type for use in state (useState)
   type Recipe = {
@@ -73,32 +72,20 @@ export default function Home() {
             </svg>
           </button>
         </div>
-        {/* language selector */}
-        {/* <div className={styles.languageSelectorContainer}>
-          <select
-            className={styles.languageSelector}
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-          >
-            <option value="English">English</option>
-            <option value="French">French</option>
-            <option value="Korean">Korean</option>
-          </select>
-        </div> */}
       </form>
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
       {result && (
         <>
-          <div className={styles.recipeVideo}>
+          <div className={styles.VideoContainer}>
             <iframe
               src={result.embedUrl}
-              width="560"
-              height="315"
+              width="700"
+              height="400"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             ></iframe>
           </div>
-          <h2 className={styles.recipeTitle}>{result.title}</h2>
+          <h2>{result.title}</h2>
 
           <h3>Ingredients</h3>
           <p>{result.ingredients}</p>
