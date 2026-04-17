@@ -31,3 +31,12 @@
   cursor: pointer;
   height: 50px;
 }
+
+.recipeVideo {
+  text-align: center;
+}
+
+.recipeTitle {
+  text-align: center;
+  font-size: 30px;
+}

@@ -90,14 +90,15 @@ export default function Home() {
       {/* because the result could be null */}
       {result && (
         <>
-          <h2>{result.title}</h2>
-
-          <iframe
-            src={result.embedUrl}
-            width="560"
-            height="315"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-          ></iframe>
+          <div className={styles.recipeVideo}>
+            <iframe
+              src={result.embedUrl}
+              width="560"
+              height="315"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+            ></iframe>
+          </div>
+          <h2 className={styles.recipeTitle}>{result.title}</h2>
 
           <h3>Ingredients</h3>
           <p>{result.ingredients}</p>
