@@ -10,13 +10,13 @@ const client = new OpenAI();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const language: string = body.language;
+    // const language: string = body.language;
 
     /// Recipe extraction prompt
     const instructionForGpt = `
           Determine whether the provided content is a cooking-related YouTube transcript.
 
-          Use ${language} only when you answer
+          Use English only when you answer
 
           Decision Rules:
           - Return only "N" if the content is clearly NOT related to cooking or food preparation.
@@ -27,8 +27,6 @@ export async function POST(req: Request) {
 
           Output Format:
           title|ingredient1 (quantity), ingredient2 (quantity), ingredient3 (quantity)|step1. step2. step3.
-
-          Use ${language} only when you answer
 
           Formatting Rules:
           - Use exactly TWO "|" delimiters:
@@ -42,7 +40,7 @@ export async function POST(req: Request) {
           - Do NOT use bullet points or numbering like "1." or "-".
 
           Language Rules:
-          - The recipe must be written in ${language} only.
+          - The recipe must be written in English only.
 
           Content Rules:
           - Base the recipe primarily on the provided transcript.
@@ -50,8 +48,6 @@ export async function POST(req: Request) {
           - If important details (quantity, time, temperature) are missing, fill them using realistic and common cooking standards.
           - Do NOT invent a completely unrelated recipe.
           - Follow the transcript structure as much as possible.
-
-          Use ${language} only when you answer
 
           Detail Requirements:
           - Include realistic ingredient quantities (e.g., 10g, 1 tbsp, 2 cups).
@@ -65,14 +61,7 @@ export async function POST(req: Request) {
             - the formatted recipe string
           - Do NOT include explanations, comments, or extra text.
 
-          Example Format (structure only, not content, language should be ${language}}):
           Honey Chicken|Chicken (500g), Salt (1 tsp), Oil (2 tbsp)|Season the chicken with salt.#Heat oil over medium heat for 5 minutes.#Fry the chicken for 10 minutes until golden.
-          
-          Use ${language} only when you answer
-
-          When you answer, do not use other languages. You must use ${language} only!!
-
-          Why are you sometimes use other languages!! Don't do it!!! Use only ${language}!!
           `;
 
     //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0

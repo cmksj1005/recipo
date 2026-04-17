@@ -13,7 +13,7 @@ import styles from './page.module.css';
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<Recipe | null>(null); // to save result from chatgpt
-  const [language, setLanguage] = useState(''); // to save language option
+  // const [language, setLanguage] = useState(''); // to save language option
 
   // Defined Recipe type for use in state (useState)
   type Recipe = {
@@ -35,7 +35,7 @@ export default function Home() {
       },
       // fetch can only send strings (or binary) in the request body
       // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
-      body: JSON.stringify({ url, language }),
+      body: JSON.stringify({ url }),
     });
 
     const data = await res.json();
@@ -74,7 +74,7 @@ export default function Home() {
           </button>
         </div>
         {/* language selector */}
-        <div className={styles.languageSelectorContainer}>
+        {/* <div className={styles.languageSelectorContainer}>
           <select
             className={styles.languageSelector}
             value={language}
@@ -84,7 +84,7 @@ export default function Home() {
             <option value="French">French</option>
             <option value="Korean">Korean</option>
           </select>
-        </div>
+        </div> */}
       </form>
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
