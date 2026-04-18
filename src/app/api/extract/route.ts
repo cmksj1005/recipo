@@ -3,13 +3,18 @@
 // =====================================================================
 
 import { fetchTranscript, TranscriptResponse } from 'youtube-transcript';
+import type { RecipeResult, RecipeIngredients } from '@/types/recipe';
 import OpenAI from 'openai';
 // This 'client' is the thing you use to talk to OpenAI
 const client = new OpenAI();
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    type RequestBody = {
+      url: string;
+    };
+
+    const body: RequestBody = await req.json();
 
     /// Recipe extraction prompt
     const instructionForGpt = `
@@ -95,6 +100,10 @@ export async function POST(req: Request) {
 
     const videoId = getVideoId(body.url);
 
+    if (!videoId) {
+      return Response.json({ error: 'Invalid YouTube URL' }, { status: 400 });
+    }
+
     // extract transcript from the youtube video
     // it returns an array of objects
     const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
@@ -117,7 +126,26 @@ export async function POST(req: Request) {
 
     const splitGptAnswer = gptAnswer.split('|');
     const recipeTitle = splitGptAnswer[0];
-    const recipeIngredients = splitGptAnswer[1];
+    const allRecipeIngredients = splitGptAnswer[1].split(',');
+
+    const recipeIngredients: RecipeIngredients[] = [];
+
+    function parseIngredients(ingredients: string[]) {
+      for (const ingredient of ingredients) {
+        const ingreName = ingredient.split('(')[0].replace(')', '').trim();
+        const ingreQuantity = ingredient.split('(')[1];
+
+        const parsedQuantity = ingreQuantity
+          ? ingreQuantity.replace(')', '').trim()
+          : 'N';
+
+        recipeIngredients.push({ name: ingreName, quantity: parsedQuantity });
+      }
+    }
+    parseIngredients(allRecipeIngredients);
+
+    console.log(recipeIngredients);
+
     const recipeInstruction = splitGptAnswer[2].split('#');
 
     // get embed url
@@ -126,7 +154,7 @@ export async function POST(req: Request) {
       return embedUrl;
     }
 
-    const result = {
+    const recipeResult: RecipeResult = {
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
@@ -134,7 +162,7 @@ export async function POST(req: Request) {
     };
 
     return Response.json({
-      result,
+      recipeResult,
     });
   } catch (err) {
     console.error(err);

@@ -9,18 +9,11 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+import type { RecipeResult } from '@/types/recipe';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
-  const [result, setResult] = useState<Recipe | null>(null); // to save result from chatgpt
-
-  // Defined Recipe type for use in state (useState)
-  type Recipe = {
-    title: string;
-    ingredients: string;
-    instruction: string[];
-    embedUrl: string;
-  };
+  const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
@@ -39,7 +32,7 @@ export default function Home() {
 
     const data = await res.json();
 
-    setResult(data.result);
+    setResult(data.recipeResult);
   }
 
   return (
@@ -88,18 +81,22 @@ export default function Home() {
             ></iframe>
           </div>
           <h2>{result.title}</h2>
-          <div className={styles.ingredientsBox}>
-            <h3>Ingredients</h3>
-            <p>{result.ingredients}</p>
+          <div className={styles.recipeWrapper}>
+            <div className={styles.ingredientsWrapper}>
+              <h3 className={styles.sectionHeading}>Ingredients</h3>
+              {/* <p>{result.ingredients}</p> */}
+            </div>
 
-            <h3>Instructions</h3>
-            <ol>
-              {result.instruction.map((step, index) => (
-                <li key={index}>
-                  {index + 1}. {step}
-                </li>
-              ))}
-            </ol>
+            <div className={styles.instructionsWrapper}>
+              <h3 className={styles.sectionHeading}>Instructions</h3>
+              <ol>
+                {result.instruction.map((step, index) => (
+                  <li key={index}>
+                    {index + 1}. {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </>
       )}

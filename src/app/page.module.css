@@ -54,6 +54,22 @@
   overflow: hidden;
 }
 
-.ingredientsBox {
+.recipeWrapper {
   margin: 0 50px 50px 50px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.ingredientsWrapper,
+.instructionsWrapper {
+  padding: 30px;
+}
+
+.ingredientsWrapper {
+  border-right: 1px solid rgba(255, 189, 35, 0.874);
+}
+
+.sectionHeading {
+  color: rgba(128, 128, 128, 0.72);
+  font-weight: 1000;
 }
