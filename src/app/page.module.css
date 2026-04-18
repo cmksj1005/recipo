@@ -1,34 +1,36 @@
 .searchbarForm {
   height: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.searchWrapper {
   width: 100%;
   padding: 0 50px;
-  /* border-box: padding stays inside the width, so it does not overflow */
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.searchbarWrapper {
+  width: 100%;
+  max-width: 700px;
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .searchBar {
   width: 100%;
-  max-width: 700px;
-  height: 50px;
+  height: 100%;
   border: 0.5px solid grey;
   border-radius: 30px;
   padding-left: 20px;
-  padding-right: 140px;
+  padding-right: 60px;
+  /* border-box: padding stays inside the width, so it does not overflow */
   box-sizing: border-box;
+  position: absolute;
 }
 
 .searchButtonWrapper {
-  position: absolute;
-  margin-left: 630px;
   height: 50px;
+  position: absolute;
+  margin-right: 20px;
 }
 
 .submitButton {
