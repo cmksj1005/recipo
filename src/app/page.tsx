@@ -47,14 +47,16 @@ export default function Home() {
       <h1>Recipo</h1>
       <form className={styles.searchbarForm} onSubmit={handleSubmit}>
         {/* search bar */}
-        <input
-          className={styles.searchBar}
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <div className={styles.searchWrapper}>
+          <input
+            className={styles.searchBar}
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+        </div>
         {/* search button */}
-        <div className={styles.searchButtonContainer}>
+        <div className={styles.searchButtonWrapper}>
           <button className={styles.submitButton} type="submit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -77,15 +79,16 @@ export default function Home() {
       {/* because the result could be null */}
       {result && (
         <>
-          <div className={styles.VideoContainer}>
+          <h2>{result.title}</h2>
+
+          <div className={styles.VideoWrapper}>
             <iframe
               src={result.embedUrl}
-              width="700"
-              height="400"
+              width="1110"
+              height="671"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             ></iframe>
           </div>
-          <h2>{result.title}</h2>
 
           <h3>Ingredients</h3>
           <p>{result.ingredients}</p>
