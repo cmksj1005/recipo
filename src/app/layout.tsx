@@ -2,10 +2,17 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Poppins } from 'next/font/google';
+import { Overpass } from 'next/font/google';
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '600', '700'], // choose weights you need
+});
+
+const overpass = Overpass({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700'], // choose weights you need
+  variable: '--font-overpass',
 });
 
 const geistSans = Geist({
@@ -31,9 +38,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${overpass.variable} h-full antialiased`}
     >
-      <body className={`min-h-full flex flex-col ${poppins.className}`}>
+      <body
+        className={`min-h-full flex flex-col ${poppins.className} ${overpass.className}`}
+      >
         {children}
       </body>
     </html>

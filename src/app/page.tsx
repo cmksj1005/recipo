@@ -80,28 +80,27 @@ export default function Home() {
       {/* because the result could be null */}
       {result && (
         <>
-          <h2>{result.title}</h2>
-
           <div className={styles.VideoWrapper}>
             <iframe
+              className={styles.recipeVideo}
               src={result.embedUrl}
-              width="1110"
-              height="671"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             ></iframe>
           </div>
+          <h2>{result.title}</h2>
+          <div className={styles.ingredientsBox}>
+            <h3>Ingredients</h3>
+            <p>{result.ingredients}</p>
 
-          <h3>Ingredients</h3>
-          <p>{result.ingredients}</p>
-
-          <h3>Instructions</h3>
-          <ol>
-            {result.instruction.map((step, index) => (
-              <li key={index}>
-                {index + 1}. {step}
-              </li>
-            ))}
-          </ol>
+            <h3>Instructions</h3>
+            <ol>
+              {result.instruction.map((step, index) => (
+                <li key={index}>
+                  {index + 1}. {step}
+                </li>
+              ))}
+            </ol>
+          </div>
         </>
       )}
     </>
