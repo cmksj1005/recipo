@@ -88,7 +88,9 @@ export default function Home() {
                 {result.ingredients.map((ingredient) => (
                   <li className={styles.ingredientItem} key={ingredient.name}>
                     <span>{ingredient.name}</span>
-                    <span>{ingredient.quantity}</span>
+                    <span>
+                      {ingredient.quantity} {ingredient.unit}
+                    </span>
                   </li>
                 ))}
               </ol>

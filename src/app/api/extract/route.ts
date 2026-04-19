@@ -65,6 +65,7 @@ export async function POST(req: Request) {
             - the formatted recipe string
           - Do NOT include explanations, comments, or extra text.
           - When you use 'minced', you should use like 'minced garlic', not garlic (1 tbsp, minced).
+          - When the amount of the ingredient '1/2', you can say it as number format like '0.5'.
 
           Honey Chicken|Chicken (500g), Salt (1 tsp), Oil (2 tbsp)|Season the chicken with salt.#Heat oil over medium heat for 5 minutes.#Fry the chicken for 10 minutes until golden.
           `;
@@ -142,7 +143,18 @@ export async function POST(req: Request) {
           ? ingreQuantity.replace(')', '').trim()
           : 'N';
 
-        recipeIngredients.push({ name: ingreName, quantity: parsedQuantity });
+        const match = parsedQuantity.match(/^(\d+(?:\.\d+)?)([a-zA-Z]*)/);
+
+        const recipeQuantity: number | null = match?.[1]
+          ? Number(match[1])
+          : null;
+        const recipeUnit: string = match?.[2] ?? '';
+
+        recipeIngredients.push({
+          name: ingreName,
+          quantity: recipeQuantity,
+          unit: recipeUnit,
+        });
       }
     }
 

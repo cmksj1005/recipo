@@ -1,6 +1,7 @@
 export type RecipeIngredients = {
   name: string;
-  quantity: string;
+  quantity: number | null;
+  unit: string;
 };
 
 export type RecipeResult = {
