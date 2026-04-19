@@ -84,7 +84,14 @@ export default function Home() {
           <div className={styles.recipeWrapper}>
             <div className={styles.ingredientsWrapper}>
               <h3 className={styles.sectionHeading}>Ingredients</h3>
-              {/* <p>{result.ingredients}</p> */}
+              <ol>
+                {result.ingredients.map((ingredient) => (
+                  <li className={styles.ingredientItem} key={ingredient.name}>
+                    <span>{ingredient.name}</span>
+                    <span>{ingredient.quantity}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
 
             <div className={styles.instructionsWrapper}>

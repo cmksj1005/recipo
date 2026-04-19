@@ -64,6 +64,7 @@ export async function POST(req: Request) {
             - "N" OR
             - the formatted recipe string
           - Do NOT include explanations, comments, or extra text.
+          - When you use 'minced', you should use like 'minced garlic', not garlic (1 tbsp, minced).
 
           Honey Chicken|Chicken (500g), Salt (1 tsp), Oil (2 tbsp)|Season the chicken with salt.#Heat oil over medium heat for 5 minutes.#Fry the chicken for 10 minutes until golden.
           `;
@@ -124,6 +125,8 @@ export async function POST(req: Request) {
 
     const gptAnswer = response.output_text;
 
+    console.log(gptAnswer);
+
     const splitGptAnswer = gptAnswer.split('|');
     const recipeTitle = splitGptAnswer[0];
     const allRecipeIngredients = splitGptAnswer[1].split(',');
@@ -142,6 +145,7 @@ export async function POST(req: Request) {
         recipeIngredients.push({ name: ingreName, quantity: parsedQuantity });
       }
     }
+
     parseIngredients(allRecipeIngredients);
 
     console.log(recipeIngredients);
