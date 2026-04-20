@@ -18,57 +18,47 @@ export async function POST(req: Request) {
 
     /// Recipe extraction prompt
     const instructionForGpt = `
-          Determine whether the provided content is a cooking-related YouTube transcript.
+      You will receive a YouTube transcript.
 
-          Use English only when you answer
+      Task:
+      1. If the content is NOT cooking-related, return "N".
+      2. If it is cooking-related (even partially), generate a recipe.
 
-          Decision Rules:
-          - Return only "N" if the content is clearly NOT related to cooking or food preparation.
-          - If the content includes cooking actions, ingredients, or food preparation (even partially), DO NOT return "N".
-          - Even if the transcript is incomplete, unclear, or missing details, treat it as a cooking recipe and proceed.
+      Output (STRICT FORMAT):
+      title|ingredient1 (quantity), ingredient2 (quantity)|step1#step2#step3
 
-          If it is cooking-related, generate a recipe using the exact format below:
+      Rules:
+      - Output ONLY "N" OR the formatted recipe string.
+      - Use EXACTLY two "|" delimiters.
+      - Do NOT include "|" anywhere else.
+      - Ingredients must be separated by ",".
+      - Steps must be separated by "#".
+      - Must not add # at the end of your answer. # is only for separating the steps.
+      - Output must be ONE LINE only (no line breaks).
 
-          Output Format:
-          title|ingredient1 (quantity), ingredient2 (quantity), ingredient3 (quantity)|step1. step2. step3.
+      Language:
+      - Use English only.
 
-          Formatting Rules:
-          - Use exactly TWO "|" delimiters:
-            - First "|" separates title and ingredients
-            - Second "|" separates ingredients and instructions
-          - Do NOT include "|" anywhere else in the output.
-          - Ingredients must be separated by commas (",").
-          - Use "#" delimiters between details in the instructions.
-          - Instructions must be written as a single line with steps separated by periods (".").
-          - Do NOT use line breaks.
-          - Do NOT use bullet points or numbering like "1." or "-".
+      Ingredients Rules:
+      - Format: name (quantity)
+      - Example: minced garlic (1 tbsp), chicken (500g)
+      - Quantity must be ONE value only (no commas inside ())
+      - Decorative words (minced, diced, chopped) must come BEFORE the ingredient name
+      - Example: finely chopped onions (2 tbsp)
+      - NOT: onions (2 tbsp, chopped)
 
-          Language Rules:
-          - The recipe must be written in English only.
+      Content Rules:
+      - Extract ingredients and steps from the transcript
+      - If missing, infer realistic quantities, time, and heat
+      - Maintain logical cooking order
+      - Do NOT create unrelated recipes
 
-          Content Rules:
-          - Base the recipe primarily on the provided transcript.
-          - Extract ingredients, actions, and cooking order from the transcript.
-          - If important details (quantity, time, temperature) are missing, fill them using realistic and common cooking standards.
-          - Do NOT invent a completely unrelated recipe.
-          - Follow the transcript structure as much as possible.
+      Notes:
+      - Use decimal format (0.5 instead of 1/2)
 
-          Detail Requirements:
-          - Include realistic ingredient quantities (e.g., 10g, 1 tbsp, 2 cups).
-          - Include cooking time when applicable (e.g., 10 minutes, until browned).
-          - Include heat level when applicable (e.g., medium heat).
-          - Ensure logical cooking order.
-
-          Strict Output Rules:
-          - Return ONLY:
-            - "N" OR
-            - the formatted recipe string
-          - Do NOT include explanations, comments, or extra text.
-          - When you use 'minced', you should use like 'minced garlic', not garlic (1 tbsp, minced).
-          - When the amount of the ingredient '1/2', you can say it as number format like '0.5'.
-
-          Honey Chicken|Chicken (500g), Salt (1 tsp), Oil (2 tbsp)|Season the chicken with salt.#Heat oil over medium heat for 5 minutes.#Fry the chicken for 10 minutes until golden.
-          `;
+      Example:
+      Honey Chicken|chicken (500g), salt (1 tsp), oil (2 tbsp)|season the chicken with salt#heat oil over medium heat for 5 minutes#fry the chicken for 10 minutes until golden
+      `;
 
     //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0
     //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
@@ -134,6 +124,7 @@ export async function POST(req: Request) {
 
     const recipeIngredients: RecipeIngredients[] = [];
 
+    // get name, quantity, unit from ingredients sentence from chat gpt
     function parseIngredients(ingredients: string[]) {
       for (const ingredient of ingredients) {
         const ingreName = ingredient.split('(')[0].replace(')', '').trim();
@@ -143,7 +134,7 @@ export async function POST(req: Request) {
           ? ingreQuantity.replace(')', '').trim()
           : 'N';
 
-        const match = parsedQuantity.match(/^(\d+(?:\.\d+)?)([a-zA-Z]*)/);
+        const match = parsedQuantity.match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]*)/);
 
         const recipeQuantity: number | null = match?.[1]
           ? Number(match[1])

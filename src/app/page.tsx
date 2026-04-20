@@ -14,25 +14,35 @@ import type { RecipeResult } from '@/types/recipe';
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
+  const [loading, setLoading] = useState(false); // for loading spinner
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
     // In this case, it stops page reload and form submission
     e.preventDefault();
 
-    const res = await fetch('/api/extract', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // fetch can only send strings (or binary) in the request body
-      // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
-      body: JSON.stringify({ url }),
-    });
+    setLoading(true);
+    setResult(null); // clear previous result
 
-    const data = await res.json();
+    try {
+      const res = await fetch('/api/extract', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // fetch can only send strings (or binary) in the request body
+        // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
+        body: JSON.stringify({ url }),
+      });
 
-    setResult(data.recipeResult);
+      const data = await res.json();
+
+      setResult(data.recipeResult);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -71,7 +81,7 @@ export default function Home() {
       </form>
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {result && (
+      {!loading && result && (
         <>
           <div className={styles.VideoWrapper}>
             <iframe
