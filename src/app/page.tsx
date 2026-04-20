@@ -10,6 +10,9 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 import type { RecipeResult } from '@/types/recipe';
+import Lottie from 'lottie-react'; // to use animation from Lottie Files
+import pizzaLoading from './animations/Prepare-Food.json'; // to use animation from Lottie Files
+import Image from 'next/image';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
@@ -47,7 +50,20 @@ export default function Home() {
 
   return (
     <>
-      <h1>Recipo</h1>
+      {/* screen reader only */}
+      <h1 className="sr-only">Recipo</h1>
+      <div className={styles.logoWrapper}>
+        {/* Used <Image> instead of <img> 
+        because it automatically optimizes images 
+        (resize, lazy-load, and improve performance) without extra work. */}
+        <Image
+          src="/logo.png"
+          alt="Recipo Logo"
+          width={300}
+          height={80}
+        ></Image>
+      </div>
+
       <form className={styles.searchbarForm} onSubmit={handleSubmit}>
         {/* search bar */}
         <div className={styles.searchbarWrapper}>
@@ -79,6 +95,17 @@ export default function Home() {
           </div>
         </div>
       </form>
+      {/* display loading spinner animation when it is loading */}
+      {loading && (
+        <div className={styles.loadingWrapper}>
+          <Lottie
+            animationData={pizzaLoading}
+            loop={true}
+            className={styles.loadingAnimation}
+          />
+          <p className={styles.loadingText}>Extracting recipe...</p>
+        </div>
+      )}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
       {!loading && result && (
