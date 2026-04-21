@@ -60,7 +60,14 @@ export async function POST(req: Request) {
       Honey Chicken|chicken (500g), salt (1 tsp), oil (2 tbsp)|season the chicken with salt#heat oil over medium heat for 5 minutes#fry the chicken for 10 minutes until golden
       `;
 
-    function isValidUrl(urlString: string): boolean {
+    let isUrlValid: boolean;
+    let recipeTitle: string;
+    let recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
+    let recipeInstruction: string[];
+    let recipeUrl: string;
+
+    // check whether the url is valid or not
+    function checkUrlFormat(urlString: string): boolean {
       try {
         new URL(urlString);
         return true;
@@ -69,7 +76,8 @@ export async function POST(req: Request) {
       }
     }
 
-    if (isValidUrl(body.url)) {
+    // if the url is valid
+    if (checkUrlFormat(body.url)) {
       //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0
       //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
       function getVideoId(urlString: string) {
@@ -126,24 +134,21 @@ export async function POST(req: Request) {
 
       const gptAnswer = response.output_text;
 
+      // ***** remove it before deploy this webapp *****
       console.log(gptAnswer);
 
       const splitGptAnswer = gptAnswer.split('|');
-      const recipeTitle = splitGptAnswer[0];
+      recipeTitle = splitGptAnswer[0];
       const allRecipeIngredients = splitGptAnswer[1].split(',');
-
-      const recipeIngredients: RecipeIngredients[] = [];
 
       // get name, quantity, unit from ingredients sentence from chat gpt
       function parseIngredients(ingredients: string[]) {
         for (const ingredient of ingredients) {
           const ingreName = ingredient.split('(')[0].replace(')', '').trim();
           const ingreQuantity = ingredient.split('(')[1];
+          const parsedQuantity = ingreQuantity.replace(')', '').trim();
 
-          const parsedQuantity = ingreQuantity
-            ? ingreQuantity.replace(')', '').trim()
-            : 'N';
-
+          // divide to quantity and unit
           const match = parsedQuantity.match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]*)/);
 
           const recipeQuantity: number | null = match?.[1]
@@ -161,9 +166,10 @@ export async function POST(req: Request) {
 
       parseIngredients(allRecipeIngredients);
 
+      // ***** remove it before deploy this webapp *****
       console.log(recipeIngredients);
 
-      const recipeInstruction = splitGptAnswer[2].split('#');
+      recipeInstruction = splitGptAnswer[2].split('#');
 
       // get embed url
       function youtubeUrlToEmbed(id: string) {
@@ -171,19 +177,28 @@ export async function POST(req: Request) {
         return embedUrl;
       }
 
-      const recipeResult: RecipeResult = {
-        title: recipeTitle,
-        ingredients: recipeIngredients,
-        instruction: recipeInstruction,
-        embedUrl: youtubeUrlToEmbed(videoId),
-      };
-
-      return Response.json({
-        recipeResult,
-      });
+      isUrlValid = true;
+      recipeUrl = youtubeUrlToEmbed(videoId);
     } else {
-      console.log('not proper url');
+      // if the url is not valid
+      isUrlValid = false;
+      recipeTitle = '';
+      recipeIngredients = [];
+      recipeInstruction = [];
+      recipeUrl = '';
     }
+
+    const recipeResult: RecipeResult = {
+      isUrlValid: isUrlValid,
+      title: recipeTitle,
+      ingredients: recipeIngredients,
+      instruction: recipeInstruction,
+      embedUrl: recipeUrl,
+    };
+
+    return Response.json({
+      recipeResult,
+    });
   } catch (err) {
     console.error(err);
     return Response.json({ error: 'Server error' }, { status: 500 });
