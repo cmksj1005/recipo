@@ -32,14 +32,3 @@ h1 {
   font-weight: 600;
   margin: 20 0 20 0;
 }
-
-h2 {
-  font-family: 'overpass', sans-serif;
-  text-align: center;
-  font-size: 40px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.714);
-  border-bottom: 1px solid rgba(255, 189, 35, 0.874);
-  padding-bottom: 20px;
-  margin: 0 50px;
-}

@@ -47,6 +47,61 @@
   height: 50px;
 }
 
+.loadingWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 32px;
+}
+.userGuideWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.userGuide {
+  max-width: 700px;
+  margin: 20px 50px;
+  text-align: justify;
+}
+
+.userGuide ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.guideSection {
+  margin: 20px 0;
+}
+
+.guideTitle {
+  display: flex;
+  gap: 10px;
+}
+
+.guideTitle h2 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #fd8585;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.userGuide ul li {
+  font-size: 20px;
+}
+
+.loadingAnimation {
+  width: 220px;
+  height: 220px;
+  background-color: #f7f5f3;
+}
+
+.loadingText {
+  margin-top: 8px;
+  font-size: 18px;
+  color: #666;
+}
+
 .VideoWrapper {
   margin: 50px;
   display: flex;
@@ -61,6 +116,17 @@
   border-radius: 16px;
   /* 'overflow: hidden' hides any content that goes outside the element's boundary */
   overflow: hidden;
+}
+
+.recipeTitle {
+  font-family: 'overpass', sans-serif;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.714);
+  border-bottom: 1px solid rgba(255, 189, 35, 0.874);
+  padding-bottom: 20px;
+  margin: 0 50px;
 }
 
 .recipeWrapper {
@@ -88,23 +154,4 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 0.5px dashed grey;
-}
-
-.loadingWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 32px;
-}
-
-.loadingAnimation {
-  width: 220px;
-  height: 220px;
-  background-color: #f7f5f3;
-}
-
-.loadingText {
-  margin-top: 8px;
-  font-size: 18px;
-  color: #666;
 }
