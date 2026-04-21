@@ -57,10 +57,12 @@ export default function Home() {
         because it automatically optimizes images 
         (resize, lazy-load, and improve performance) without extra work. */}
         <Image
+          className={styles.logo}
           src="/logo.png"
           alt="Recipo Logo"
           width={300}
-          height={80}
+          height={100}
+          priority
         ></Image>
       </div>
 
@@ -96,8 +98,14 @@ export default function Home() {
         </div>
       </form>
       {/* display loading spinner animation when it is loading */}
+
+      {!loading && !result && (
+        <div className={styles.initialMessage}>
+          <p>Paste a YouTube cooking URL to extract the recipe.</p>
+        </div>
+      )}
       {loading && (
-        <div className={styles.loadingWrapper}>
+        <div className={styles.loadingWrapperki}>
           <Lottie
             animationData={pizzaLoading}
             loop={true}
