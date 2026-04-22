@@ -21,6 +21,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false); // for loading spinner
   const [showNotification, setShowNotification] = useState(false); // for display notificaton modal window.
 
+  // when user enters url, this function will be called.
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
     // In this case, it stops page reload and form submission
@@ -44,7 +45,7 @@ export default function Home() {
 
       setResult(data.recipeResult);
 
-      // why setResult doesn't work right away?
+      // if url is invalid, set showNotification to true
       if (!data.recipeResult.isUrlValid) {
         setShowNotification(true);
       }
