@@ -13,12 +13,14 @@ import {
 export default function NotificationModal({
   open,
   onOpenChange,
-  title,
+  titleImage,
+  modalTitle,
   description,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void; // functions can be types in TS -> type of a function
-  title: React.ReactNode | string;
+  titleImage: React.ReactNode;
+  modalTitle: string;
   description: React.ReactNode | string;
 }) {
   return (
@@ -26,7 +28,10 @@ export default function NotificationModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={styles.dialogContent}>
         <DialogHeader>
-          <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
+          <DialogTitle className={styles.dialogTitle}>
+            <div className={styles.titleImage}>{titleImage}</div>
+            <div className={styles.modalTitle}>{modalTitle}</div>
+          </DialogTitle>
           <DialogDescription className={styles.dialogDescription}>
             {description}
           </DialogDescription>

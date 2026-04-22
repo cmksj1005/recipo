@@ -70,7 +70,7 @@ export default function Home() {
           width={300}
           height={100}
           priority
-        ></Image>
+        />
       </div>
 
       <form className={styles.searchbarForm} onSubmit={handleSubmit}>
@@ -108,19 +108,22 @@ export default function Home() {
       <NotificationModal
         open={showNotification}
         onOpenChange={setShowNotification}
-        title=<div>
+        titleImage={
           <Image
             src="/icons/embarrassedIcon.png"
             alt="Invalid URL Notification Icon"
             width={40}
             height={40}
-          ></Image>
-          <div>Invalid YouTube URL</div>
-        </div>
-        description=<div>
-          Please enter a valid YouTube video link. <br />
-          (e.g., https://www.youtube.com/...)
-        </div>
+          />
+        }
+        modalTitle="Invalid YouTube URL"
+        description={
+          <div>
+            Please enter a valid YouTube video link.
+            <br />
+            (e.g., https://www.youtube.com/...)
+          </div>
+        }
       />
 
       {!loading && !result?.isUrlValid && (
