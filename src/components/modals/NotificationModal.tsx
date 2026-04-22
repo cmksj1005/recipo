@@ -21,7 +21,7 @@ export default function NotificationModal({
   onOpenChange: (open: boolean) => void; // functions can be types in TS -> type of a function
   titleImage: React.ReactNode;
   modalTitle: string;
-  description: React.ReactNode | string;
+  description: string;
 }) {
   return (
     // onOpenChange: when user close the modal, it becomes 'false'
@@ -32,7 +32,10 @@ export default function NotificationModal({
             <div className={styles.titleImage}>{titleImage}</div>
             <div className={styles.modalTitle}>{modalTitle}</div>
           </DialogTitle>
-          <DialogDescription className={styles.dialogDescription}>
+          <DialogDescription
+            className={`${styles.dialogDescription} whitespace-pre-line`}
+            // whitespace-pre-line is a Tailwind CSS class that makes \n work as line breaks.
+          >
             {description}
           </DialogDescription>
         </DialogHeader>

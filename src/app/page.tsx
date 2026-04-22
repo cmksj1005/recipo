@@ -104,7 +104,7 @@ export default function Home() {
           </div>
         </div>
       </form>
-
+      {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
         open={showNotification}
         onOpenChange={setShowNotification}
@@ -118,11 +118,7 @@ export default function Home() {
         }
         modalTitle="Invalid YouTube URL"
         description={
-          <div>
-            Please enter a valid YouTube video link.
-            <br />
-            (e.g., https://www.youtube.com/...)
-          </div>
+          'Please enter a valid YouTube video link.\n(e.g., https://www.youtube.com/...)'
         }
       />
 
