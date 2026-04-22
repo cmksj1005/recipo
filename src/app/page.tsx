@@ -19,7 +19,9 @@ export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
   const [loading, setLoading] = useState(false); // for loading spinner
-  const [showNotification, setShowNotification] = useState(false); // for display notificaton modal window.
+  const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
+  const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
+    useState(false); // to display non-cooking-related url warning modal
 
   // when user enters url, this function will be called.
   async function handleSubmit(e: React.FormEvent) {
@@ -29,6 +31,8 @@ export default function Home() {
 
     setLoading(true);
     setResult(null); // clear previous result
+    setInvalidUrlWarning(false);
+    setNonCookingRelatedUrlWarning(false);
 
     try {
       const res = await fetch('/api/extract', {
@@ -47,7 +51,12 @@ export default function Home() {
 
       // if url is invalid, set showNotification to true
       if (!data.recipeResult.isUrlValid) {
-        setShowNotification(true);
+        setInvalidUrlWarning(true);
+      }
+
+      // if url is invalid, set showNotification to true
+      if (!data.recipeResult.isCookingRelated) {
+        setNonCookingRelatedUrlWarning(true);
       }
     } catch (error) {
       console.error(error);
@@ -107,8 +116,8 @@ export default function Home() {
       </form>
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
-        open={showNotification}
-        onOpenChange={setShowNotification}
+        open={invalidUrlWarning}
+        onOpenChange={setInvalidUrlWarning}
         titleImage={
           <Image
             src="/icons/embarrassedIcon.png"
@@ -123,7 +132,23 @@ export default function Home() {
         }
       />
 
-      {!loading && !result?.isUrlValid && (
+      {/* if user enters non-cooking-related url, Warning Notification will be displayed. */}
+      <NotificationModal
+        open={nonCookingRelatedUrlWarning}
+        onOpenChange={setNonCookingRelatedUrlWarning}
+        titleImage={
+          <Image
+            src="/icons/embarrassedIcon.png"
+            alt="Invalid URL Notification Icon"
+            width={40}
+            height={40}
+          />
+        }
+        modalTitle="Non-cooking URL"
+        description={'Please enter cooking related url'}
+      />
+
+      {!loading && !result?.isUrlValid && !result?.isCookingRelated && (
         <div className={styles.userGuideWrapper}>
           <div className={styles.userGuide}>
             <div className={styles.guideSection}>
@@ -211,7 +236,7 @@ export default function Home() {
         </div>
       )}
       {/* display loading spinner animation when it is loading */}
-      {loading && result?.isUrlValid && (
+      {loading && result?.isUrlValid && !result?.isCookingRelated && (
         <div className={styles.loadingWrapper}>
           <Lottie
             animationData={pizzaLoading}
@@ -223,7 +248,7 @@ export default function Home() {
       )}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {!loading && result?.isUrlValid && (
+      {!loading && result?.isUrlValid && result?.isCookingRelated && (
         <>
           <div className={styles.VideoWrapper}>
             <iframe

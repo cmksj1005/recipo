@@ -60,6 +60,7 @@ export async function POST(req: Request) {
       Honey Chicken|chicken (500g), salt (1 tsp), oil (2 tbsp)|season the chicken with salt#heat oil over medium heat for 5 minutes#fry the chicken for 10 minutes until golden
       `;
 
+    let isCookingRelated: boolean;
     let isUrlValid: boolean;
     let recipeTitle: string;
     let recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
@@ -132,56 +133,70 @@ export async function POST(req: Request) {
         input: transcriptTextParts + instructionForGpt,
       });
 
-      const gptAnswer = response.output_text;
+      const gptAnswer: string = response.output_text;
 
-      // ***** remove it before deploy this webapp *****
-      console.log(gptAnswer);
+      if (gptAnswer == 'N') {
+        isCookingRelated = false;
+        isUrlValid = true;
+        recipeTitle = '';
+        recipeIngredients = [];
+        recipeInstruction = [];
+        recipeUrl = '';
+      } else {
+        // ***** remove it before deploy this webapp *****
+        console.log(gptAnswer);
 
-      const splitGptAnswer = gptAnswer.split('|');
-      recipeTitle = splitGptAnswer[0];
-      const allRecipeIngredients = splitGptAnswer[1].split(',');
+        isCookingRelated = true;
 
-      // get name, quantity, unit from ingredients sentence from chat gpt
-      function parseIngredients(ingredients: string[]) {
-        for (const ingredient of ingredients) {
-          const ingreName = ingredient.split('(')[0].replace(')', '').trim();
-          const ingreQuantity = ingredient.split('(')[1];
-          const parsedQuantity = ingreQuantity.replace(')', '').trim();
+        const splitGptAnswer = gptAnswer.split('|');
+        recipeTitle = splitGptAnswer[0];
+        const allRecipeIngredients = splitGptAnswer[1].split(',');
 
-          // divide to quantity and unit
-          const match = parsedQuantity.match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]*)/);
+        // get name, quantity, unit from ingredients sentence from chat gpt
+        function parseIngredients(ingredients: string[]) {
+          for (const ingredient of ingredients) {
+            const ingreName = ingredient.split('(')[0].replace(')', '').trim();
+            const ingreQuantity = ingredient.split('(')[1];
+            const parsedQuantity = ingreQuantity.replace(')', '').trim();
 
-          const recipeQuantity: number | null = match?.[1]
-            ? Number(match[1])
-            : null;
-          const recipeUnit: string = match?.[2] ?? '';
+            // divide to quantity and unit
+            const match = parsedQuantity.match(
+              /^(\d+(?:\.\d+)?)\s*([a-zA-Z]*)/,
+            );
 
-          recipeIngredients.push({
-            name: ingreName,
-            quantity: recipeQuantity,
-            unit: recipeUnit,
-          });
+            const recipeQuantity: number | null = match?.[1]
+              ? Number(match[1])
+              : null;
+            const recipeUnit: string = match?.[2] ?? '';
+
+            recipeIngredients.push({
+              name: ingreName,
+              quantity: recipeQuantity,
+              unit: recipeUnit,
+            });
+          }
         }
+
+        parseIngredients(allRecipeIngredients);
+
+        // ***** remove it before deploy this webapp *****
+        console.log(recipeIngredients);
+
+        recipeInstruction = splitGptAnswer[2].split('#');
+
+        // get embed url
+        function youtubeUrlToEmbed(id: string) {
+          const embedUrl = `https://www.youtube.com/embed/${id}`;
+          return embedUrl;
+        }
+
+        isUrlValid = true;
+        recipeUrl = youtubeUrlToEmbed(videoId);
       }
-
-      parseIngredients(allRecipeIngredients);
-
-      // ***** remove it before deploy this webapp *****
-      console.log(recipeIngredients);
-
-      recipeInstruction = splitGptAnswer[2].split('#');
-
-      // get embed url
-      function youtubeUrlToEmbed(id: string) {
-        const embedUrl = `https://www.youtube.com/embed/${id}`;
-        return embedUrl;
-      }
-
-      isUrlValid = true;
-      recipeUrl = youtubeUrlToEmbed(videoId);
     } else {
       // if the url is not valid
       isUrlValid = false;
+      isCookingRelated = true;
       recipeTitle = '';
       recipeIngredients = [];
       recipeInstruction = [];
@@ -190,6 +205,7 @@ export async function POST(req: Request) {
 
     const recipeResult: RecipeResult = {
       isUrlValid: isUrlValid,
+      isCookingRelated: isCookingRelated,
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
