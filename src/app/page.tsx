@@ -108,7 +108,15 @@ export default function Home() {
       <NotificationModal
         open={showNotification}
         onOpenChange={setShowNotification}
-        title="Invalid YouTube URL"
+        title=<div>
+          <Image
+            src="/icons/embarrassedIcon.png"
+            alt="Invalid URL Notification Icon"
+            width={40}
+            height={40}
+          ></Image>
+          <div>Invalid YouTube URL</div>
+        </div>
         description=<div>
           Please enter a valid YouTube video link. <br />
           (e.g., https://www.youtube.com/...)

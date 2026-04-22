@@ -18,7 +18,7 @@ export default function NotificationModal({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void; // functions can be types in TS -> type of a function
-  title: string;
+  title: React.ReactNode | string;
   description: React.ReactNode | string;
 }) {
   return (

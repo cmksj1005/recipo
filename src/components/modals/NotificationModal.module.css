@@ -2,7 +2,13 @@
   background-color: rgb(237, 237, 237);
 }
 
-.dialogTitle {
+.dialogTitle div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dialogTitle div div {
   font-size: 20px;
   font-weight: 800;
 }
