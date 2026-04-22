@@ -13,11 +13,13 @@ import type { RecipeResult } from '@/types/recipe';
 import Lottie from 'lottie-react'; // to use animation from Lottie Files
 import pizzaLoading from './animations/Prepare-Food.json'; // to use animation from Lottie Files
 import Image from 'next/image';
+import NotificationModal from '@/components/modals/NotificationModal.tsx';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
   const [loading, setLoading] = useState(false); // for loading spinner
+  const [showNotification, setShowNotification] = useState(false); // for display notificaton modal window.
 
   async function handleSubmit(e: React.FormEvent) {
     // Prevent default browser action
@@ -41,6 +43,11 @@ export default function Home() {
       const data = await res.json();
 
       setResult(data.recipeResult);
+
+      // why setResult doesn't work right away?
+      if (!data.recipeResult.isUrlValid) {
+        setShowNotification(true);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -97,9 +104,13 @@ export default function Home() {
           </div>
         </div>
       </form>
-      {/* display loading spinner animation when it is loading */}
 
-      {!loading && !result && (
+      <NotificationModal
+        open={showNotification}
+        onOpenChange={setShowNotification}
+      />
+
+      {!loading && !result?.isUrlValid && (
         <div className={styles.userGuideWrapper}>
           <div className={styles.userGuide}>
             <div className={styles.guideSection}>
@@ -186,7 +197,8 @@ export default function Home() {
           </div>
         </div>
       )}
-      {loading && (
+      {/* display loading spinner animation when it is loading */}
+      {loading && result?.isUrlValid && (
         <div className={styles.loadingWrapper}>
           <Lottie
             animationData={pizzaLoading}
@@ -198,7 +210,7 @@ export default function Home() {
       )}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {!loading && result && (
+      {!loading && result?.isUrlValid && (
         <>
           <div className={styles.VideoWrapper}>
             <iframe

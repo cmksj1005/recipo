@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Overpass } from 'next/font/google';
+import { Overpass, Geist } from 'next/font/google';
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const overpass = Overpass({
   variable: '--font-overpass',
@@ -19,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${overpass.variable} h-full antialiased`}>
+    <html lang="en" className={cn("h-full", "antialiased", overpass.variable, "font-sans", geist.variable)}>
       <body className={`min-h-full flex flex-col`}>{children}</body>
     </html>
   );
