@@ -13,7 +13,7 @@ import type { RecipeResult } from '@/types/recipe';
 import Lottie from 'lottie-react'; // to use animation from Lottie Files
 import pizzaLoading from './animations/Prepare-Food.json'; // to use animation from Lottie Files
 import Image from 'next/image';
-import NotificationModal from '@/components/modals/NotificationModal.tsx';
+import NotificationModal from '@/components/modals/NotificationModal';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
@@ -108,6 +108,8 @@ export default function Home() {
       <NotificationModal
         open={showNotification}
         onOpenChange={setShowNotification}
+        title="Invalid YouTube URL"
+        description="Please enter a valid YouTube video link. (e.g., https://www.youtube.com/...)"
       />
 
       {!loading && !result?.isUrlValid && (

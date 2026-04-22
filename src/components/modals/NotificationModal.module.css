@@ -1,0 +1,12 @@
+.dialogContent {
+  background-color: rgb(237, 237, 237);
+}
+
+.dialogTitle {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.dialogContent {
+  font-size: 15px;
+}
