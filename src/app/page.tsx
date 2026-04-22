@@ -109,7 +109,10 @@ export default function Home() {
         open={showNotification}
         onOpenChange={setShowNotification}
         title="Invalid YouTube URL"
-        description="Please enter a valid YouTube video link. (e.g., https://www.youtube.com/...)"
+        description=<div>
+          Please enter a valid YouTube video link. <br />
+          (e.g., https://www.youtube.com/...)
+        </div>
       />
 
       {!loading && !result?.isUrlValid && (
