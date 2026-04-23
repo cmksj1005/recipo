@@ -31,8 +31,8 @@ export default function Home() {
 
     setLoading(true);
     setResult(null); // clear previous result
-    setInvalidUrlWarning(false);
-    setNonCookingRelatedUrlWarning(false);
+    // setInvalidUrlWarning(false);
+    // setNonCookingRelatedUrlWarning(false);
 
     try {
       const res = await fetch('/api/extract', {
@@ -50,12 +50,12 @@ export default function Home() {
       setResult(data.recipeResult);
 
       // if url is invalid, set showNotification to true
-      if (!data.recipeResult.isUrlValid) {
+      if (data.recipeResult.invalidUrl) {
         setInvalidUrlWarning(true);
       }
 
       // if url is invalid, set showNotification to true
-      if (!data.recipeResult.isCookingRelated) {
+      if (data.recipeResult.nonCookingRelated) {
         setNonCookingRelatedUrlWarning(true);
       }
     } catch (error) {
@@ -148,7 +148,7 @@ export default function Home() {
         description={'Please enter cooking related url'}
       />
 
-      {!loading && !result?.isUrlValid && !result?.isCookingRelated && (
+      {!loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
         <div className={styles.userGuideWrapper}>
           <div className={styles.userGuide}>
             <div className={styles.guideSection}>
@@ -236,7 +236,7 @@ export default function Home() {
         </div>
       )}
       {/* display loading spinner animation when it is loading */}
-      {loading && result?.isUrlValid && !result?.isCookingRelated && (
+      {loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
         <div className={styles.loadingWrapper}>
           <Lottie
             animationData={pizzaLoading}
@@ -248,7 +248,7 @@ export default function Home() {
       )}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {!loading && result?.isUrlValid && result?.isCookingRelated && (
+      {!loading && result && (
         <>
           <div className={styles.VideoWrapper}>
             <iframe

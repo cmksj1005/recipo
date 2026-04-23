@@ -1,6 +1,6 @@
 export type RecipeResult = {
-  isUrlValid: boolean;
-  isCookingRelated: boolean;
+  invalidUrl: boolean;
+  nonCookingRelated: boolean;
   title: string;
   ingredients: RecipeIngredients[];
   instruction: string[];

@@ -60,8 +60,8 @@ export async function POST(req: Request) {
       Honey Chicken|chicken (500g), salt (1 tsp), oil (2 tbsp)|season the chicken with salt#heat oil over medium heat for 5 minutes#fry the chicken for 10 minutes until golden
       `;
 
-    let isCookingRelated: boolean;
-    let isUrlValid: boolean;
+    let nonCookingRelated: boolean;
+    let invalidUrl: boolean;
     let recipeTitle: string;
     let recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
     let recipeInstruction: string[];
@@ -135,9 +135,10 @@ export async function POST(req: Request) {
 
       const gptAnswer: string = response.output_text;
 
+      // if url is non-cooking-related,
       if (gptAnswer == 'N') {
-        isCookingRelated = false;
-        isUrlValid = true;
+        nonCookingRelated = true;
+        invalidUrl = false;
         recipeTitle = '';
         recipeIngredients = [];
         recipeInstruction = [];
@@ -146,7 +147,7 @@ export async function POST(req: Request) {
         // ***** remove it before deploy this webapp *****
         console.log(gptAnswer);
 
-        isCookingRelated = true;
+        nonCookingRelated = false;
 
         const splitGptAnswer = gptAnswer.split('|');
         recipeTitle = splitGptAnswer[0];
@@ -190,13 +191,13 @@ export async function POST(req: Request) {
           return embedUrl;
         }
 
-        isUrlValid = true;
+        invalidUrl = false;
         recipeUrl = youtubeUrlToEmbed(videoId);
       }
     } else {
       // if the url is not valid
-      isUrlValid = false;
-      isCookingRelated = true;
+      invalidUrl = true;
+      nonCookingRelated = false;
       recipeTitle = '';
       recipeIngredients = [];
       recipeInstruction = [];
@@ -204,8 +205,8 @@ export async function POST(req: Request) {
     }
 
     const recipeResult: RecipeResult = {
-      isUrlValid: isUrlValid,
-      isCookingRelated: isCookingRelated,
+      invalidUrl: invalidUrl,
+      nonCookingRelated: nonCookingRelated,
       title: recipeTitle,
       ingredients: recipeIngredients,
       instruction: recipeInstruction,
