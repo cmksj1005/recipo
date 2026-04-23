@@ -11,15 +11,14 @@ import { useState } from 'react';
 import styles from './page.module.css';
 import Searchbar from '@/components/recipe/Searchbar';
 import type { RecipeResult } from '@/types/recipe';
-import Lottie from 'lottie-react'; // to use animation from Lottie Files
-import pizzaLoading from './animations/prepare-food.json'; // to use animation from Lottie Files
 import Image from 'next/image';
 import NotificationModal from '@/components/modals/NotificationModal';
-import Instructions from '@/components/recipe/Instructions';
+import UserGuide from '@/components/recipe/UserGuide';
+import Result from '@/components/recipe/Result';
 
 export default function Home() {
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
-  const [loading, setLoading] = useState(false); // for loading spinner
+  // const [loading, setLoading] = useState(false); // for loading spinner
   const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
   const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
     useState(false); // to display non-cooking-related url warning modal
@@ -42,6 +41,7 @@ export default function Home() {
       // if url is invalid, set showNotification to true
       if (data.recipeResult.invalidUrl) {
         setInvalidUrlWarning(true);
+        return;
       }
 
       // if (data.error === 'Invalid YouTube URL') {
@@ -55,13 +55,11 @@ export default function Home() {
         return;
       }
 
-      console.log(data.recipeResult);
-
       setResult(data.recipeResult);
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }
 
@@ -84,6 +82,11 @@ export default function Home() {
       </div>
 
       <Searchbar handleSubmit={handleSubmit} />
+
+      {!invalidUrlWarning && !nonCookingRelatedUrlWarning && <UserGuide />}
+      {/* if I don't check whether result exists first, it returns error */}
+      {/* because the result could be null */}
+      {result && <Result result={result} />}
 
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
@@ -120,61 +123,6 @@ export default function Home() {
         modalTitle="Non-cooking URL"
         description={'Please enter cooking related url'}
       />
-
-      {!loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
-        <Instructions />
-      )}
-      {/* display loading spinner animation when it is loading */}
-      {loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
-        <div className={styles.loadingWrapper}>
-          <Lottie
-            animationData={pizzaLoading}
-            loop={true}
-            className={styles.loadingAnimation}
-          />
-          <p className={styles.loadingText}>Extracting recipe...</p>
-        </div>
-      )}
-      {/* if I don't check whether result exists first, it returns error */}
-      {/* because the result could be null */}
-      {!loading && result && (
-        <>
-          <div className={styles.VideoWrapper}>
-            <iframe
-              className={styles.recipeVideo}
-              src={result.embedUrl}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-            ></iframe>
-          </div>
-          <h2 className={styles.recipeTitle}>{result.title}</h2>
-          <div className={styles.recipeWrapper}>
-            <div className={styles.ingredientsWrapper}>
-              <h3 className={styles.sectionHeading}>Ingredients</h3>
-              <ol>
-                {result.ingredients.map((ingredient) => (
-                  <li className={styles.ingredientItem} key={ingredient.name}>
-                    <span>{ingredient.name}</span>
-                    <span>
-                      {ingredient.quantity} {ingredient.unit}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <div className={styles.instructionsWrapper}>
-              <h3 className={styles.sectionHeading}>Instructions</h3>
-              <ol>
-                {result.instruction.map((step, index) => (
-                  <li key={index}>
-                    {index + 1}. {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </>
-      )}
     </>
   );
 }

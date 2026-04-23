@@ -1,4 +1,4 @@
-import styles from './Insctuctions.module.css';
+import styles from './UserGuide.module.css';
 import Image from 'next/image';
 
 export default function Instructions() {
