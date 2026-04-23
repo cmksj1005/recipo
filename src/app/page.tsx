@@ -86,7 +86,7 @@ export default function Home() {
       {!invalidUrlWarning && !nonCookingRelatedUrlWarning && <UserGuide />}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {result && <Result result={result} />}
+      {result && <Result data={result} />}
 
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
