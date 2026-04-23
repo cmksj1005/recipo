@@ -11,7 +11,7 @@ export default function Instructions() {
               src="/icons/questionIcon.png"
               alt="question mark icon"
               width={70}
-              height={25}
+              height={70}
               style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>
@@ -34,7 +34,7 @@ export default function Instructions() {
               src="/icons/starIcon.png"
               alt="question mark icon"
               width={70}
-              height={25}
+              height={70}
               style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>
@@ -67,7 +67,7 @@ export default function Instructions() {
               src="/icons/conversationIcon.png"
               alt="question mark icon"
               width={70}
-              height={25}
+              height={70}
               style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>

@@ -15,16 +15,22 @@ import Image from 'next/image';
 import NotificationModal from '@/components/modals/NotificationModal';
 import UserGuide from '@/components/recipe/UserGuide';
 import Result from '@/components/recipe/Result';
+import Loading from '@/components/recipe/Loading';
 
 export default function Home() {
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
-  // const [loading, setLoading] = useState(false); // for loading spinner
+  const [loading, setLoading] = useState(false); // for loading spinner
   const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
   const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
     useState(false); // to display non-cooking-related url warning modal
 
   // when user enters url, this function will be called.
   async function handleSubmit(url: string) {
+    setLoading(true);
+    setResult(null);
+    setInvalidUrlWarning(false);
+    setNonCookingRelatedUrlWarning(false);
+
     try {
       const res = await fetch('/api/extract', {
         method: 'POST',
@@ -59,7 +65,7 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   }
 
@@ -76,17 +82,25 @@ export default function Home() {
           alt="Recipo Logo"
           width={300}
           height={100}
-          style={{ width: 'auto', height: 'auto' }} // to remove warning
+          style={{ width: 'auto', height: 'auto' }} // to remove warning about width and height
           priority
         />
       </div>
 
       <Searchbar handleSubmit={handleSubmit} />
 
-      {!invalidUrlWarning && !nonCookingRelatedUrlWarning && <UserGuide />}
+      {loading && <Loading />}
+
+      {!loading &&
+        !result &&
+        !invalidUrlWarning &&
+        !nonCookingRelatedUrlWarning && <UserGuide />}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {result && <Result data={result} />}
+      {!loading &&
+        result &&
+        !invalidUrlWarning &&
+        !nonCookingRelatedUrlWarning && <Result data={result} />}
 
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
