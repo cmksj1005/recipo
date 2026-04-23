@@ -9,6 +9,8 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+import Searchbar from '@/components/recipe/Searchbar';
+import type { RecipeResult } from '@/types/recipe';
 import Lottie from 'lottie-react'; // to use animation from Lottie Files
 import pizzaLoading from './animations/prepare-food.json'; // to use animation from Lottie Files
 import Image from 'next/image';
@@ -16,6 +18,53 @@ import NotificationModal from '@/components/modals/NotificationModal';
 import Instructions from '@/components/recipe/Instructions';
 
 export default function Home() {
+  const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
+  const [loading, setLoading] = useState(false); // for loading spinner
+  const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
+  const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
+    useState(false); // to display non-cooking-related url warning modal
+
+  // when user enters url, this function will be called.
+  async function handleSubmit(url: string) {
+    try {
+      const res = await fetch('/api/extract', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // fetch can only send strings (or binary) in the request body
+        // JSON.stringify({url}) = { "url": "https://youtube.com/example" }
+        body: JSON.stringify({ url }),
+      });
+
+      const data = await res.json();
+
+      // if url is invalid, set showNotification to true
+      if (data.recipeResult.invalidUrl) {
+        setInvalidUrlWarning(true);
+      }
+
+      // if (data.error === 'Invalid YouTube URL') {
+      //   setInvalidUrlWarning(true);
+      //   return;
+      // }
+
+      // if url is invalid, set showNotification to true
+      if (data.recipeResult.nonCookingRelated) {
+        setNonCookingRelatedUrlWarning(true);
+        return;
+      }
+
+      console.log(data.recipeResult);
+
+      setResult(data.recipeResult);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       {/* screen reader only */}
@@ -25,14 +74,16 @@ export default function Home() {
         because it automatically optimizes images 
         (resize, lazy-load, and improve performance) without extra work. */}
         <Image
-          className={styles.logo}
           src="/logo.png"
           alt="Recipo Logo"
           width={300}
           height={100}
+          style={{ width: 'auto', height: 'auto' }} // to remove warning
           priority
         />
       </div>
+
+      <Searchbar handleSubmit={handleSubmit} />
 
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
@@ -44,6 +95,7 @@ export default function Home() {
             alt="Invalid URL Notification Icon"
             width={40}
             height={40}
+            style={{ width: 'auto', height: 'auto' }} // to remove warning
           />
         }
         modalTitle="Invalid YouTube URL"
@@ -62,6 +114,7 @@ export default function Home() {
             alt="Invalid URL Notification Icon"
             width={40}
             height={40}
+            style={{ width: 'auto', height: 'auto' }} // to remove warning
           />
         }
         modalTitle="Non-cooking URL"

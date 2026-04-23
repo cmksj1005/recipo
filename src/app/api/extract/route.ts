@@ -145,6 +145,7 @@ export async function POST(req: Request) {
         recipeUrl = '';
       } else {
         // *** remove it before deploy this webapp ***
+        console.log('This is gpt answer');
         console.log(gptAnswer);
 
         nonCookingRelated = false;
@@ -181,6 +182,7 @@ export async function POST(req: Request) {
         parseIngredients(allRecipeIngredients);
 
         // ***** remove it before deploy this webapp *****
+        console.log('this is ingredients');
         console.log(recipeIngredients);
 
         recipeInstruction = splitGptAnswer[2].split('#');
