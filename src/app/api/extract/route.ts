@@ -144,7 +144,7 @@ export async function POST(req: Request) {
         recipeInstruction = [];
         recipeUrl = '';
       } else {
-        // ***** remove it before deploy this webapp *****
+        // *** remove it before deploy this webapp ***
         console.log(gptAnswer);
 
         nonCookingRelated = false;
