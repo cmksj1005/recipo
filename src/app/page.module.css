@@ -53,7 +53,7 @@
   align-items: center;
   margin-top: 32px;
 }
-.userGuideWrapper {
+/* .userGuideWrapper {
   display: flex;
   justify-content: center;
 }
@@ -88,7 +88,7 @@
 
 .userGuide ul li {
   font-size: 20px;
-}
+} */
 
 .loadingAnimation {
   width: 220px;

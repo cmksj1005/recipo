@@ -11,9 +11,10 @@ import { useState } from 'react';
 import styles from './page.module.css';
 import type { RecipeResult } from '@/types/recipe';
 import Lottie from 'lottie-react'; // to use animation from Lottie Files
-import pizzaLoading from './animations/Prepare-Food.json'; // to use animation from Lottie Files
+import pizzaLoading from './animations/prepare-food.json'; // to use animation from Lottie Files
 import Image from 'next/image';
 import NotificationModal from '@/components/modals/NotificationModal';
+import Instructions from '@/components/recipe/Instructions';
 
 export default function Home() {
   const [url, setUrl] = useState(''); // to save url that user enters
@@ -149,91 +150,7 @@ export default function Home() {
       />
 
       {!loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
-        <div className={styles.userGuideWrapper}>
-          <div className={styles.userGuide}>
-            <div className={styles.guideSection}>
-              <div className={styles.guideTitle}>
-                <Image
-                  src="/icons/questionIcon.png"
-                  alt="question mark icon"
-                  width={70}
-                  height={25}
-                  priority
-                ></Image>
-                <h2>How to Use Recipo</h2>
-              </div>
-              <ul>
-                <li>
-                  Paste a <strong>YouTube cooking video URL</strong> into the
-                  search bar and submit.
-                </li>
-                <li>
-                  The app will automatically extract and generate a structured
-                  recipe from the video.
-                </li>
-              </ul>
-            </div>
-            <div className={styles.guideSection}>
-              <div className={styles.guideTitle}>
-                <Image
-                  src="/icons/starIcon.png"
-                  alt="question mark icon"
-                  width={70}
-                  height={25}
-                  priority
-                ></Image>
-                <h2>Important Notes</h2>
-              </div>
-              <ul>
-                <li>
-                  Recipes are generated using{' '}
-                  <strong>AI based on the video’s transcript</strong>.
-                </li>
-                <li>
-                  If the video{' '}
-                  <strong>does not include spoken instructions </strong>
-                  or{' '}
-                  <strong>
-                    does not have an available transcript (including
-                    auto-generated captions)
-                  </strong>
-                  , the recipe may not be displayed or may be incomplete.
-                </li>
-                <li>
-                  The accuracy of the recipe depends on the{' '}
-                  <strong>quality and clarity of the transcript</strong>.
-                </li>
-              </ul>
-            </div>
-            <div className={styles.guideSection}>
-              <div className={styles.guideTitle}>
-                <Image
-                  src="/icons/conversationIcon.png"
-                  alt="question mark icon"
-                  width={70}
-                  height={25}
-                  priority
-                ></Image>
-                <h2>Feedback & Support</h2>
-              </div>
-              <ul>
-                <li>
-                  If you encounter any{' '}
-                  <strong>errors, bugs, or unexpected results</strong>, please
-                  let me know.
-                </li>
-                <li>
-                  Your feedback is extremely valuable and helps improve the
-                  application.
-                </li>
-                <li>
-                  I appreciate your support in making this tool better for
-                  everyone.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <Instructions />
       )}
       {/* display loading spinner animation when it is loading */}
       {loading && !invalidUrlWarning && !nonCookingRelatedUrlWarning && (
