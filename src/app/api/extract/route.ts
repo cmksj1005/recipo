@@ -112,8 +112,6 @@ export async function POST(req: Request) {
           ) {
             return v;
           }
-          // if user enters wrong url
-          console.log('Error from getVideoId function');
         }
       }
 
@@ -125,7 +123,25 @@ export async function POST(req: Request) {
 
       // extract transcript from the youtube video
       // it returns an array of objects
-      const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
+      // ****** should start with this part ******
+      let transcript: TranscriptResponse[];
+
+      try {
+        transcript = await fetchTranscript(videoId);
+      } catch (e) {
+        console.error('Transcript error:', e);
+
+        return Response.json({
+          recipeResult: {
+            invalidUrl: true,
+            nonCookingRelated: false,
+            title: '',
+            ingredients: [],
+            instruction: [],
+            embedUrl: '',
+          },
+        });
+      }
 
       let transcriptTextParts = '';
 
@@ -205,6 +221,10 @@ export async function POST(req: Request) {
       recipeInstruction = [];
       recipeUrl = '';
     }
+
+    console.log('This is invalid url');
+
+    console.log(invalidUrl);
 
     const recipeResult: RecipeResult = {
       invalidUrl: invalidUrl,
