@@ -12,7 +12,6 @@ export default function Instructions() {
               alt="question mark icon"
               width={70}
               height={70}
-              style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>
             <h2>How to Use Recipo</h2>
@@ -35,7 +34,6 @@ export default function Instructions() {
               alt="question mark icon"
               width={70}
               height={70}
-              style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>
             <h2>Important Notes</h2>
@@ -68,7 +66,6 @@ export default function Instructions() {
               alt="question mark icon"
               width={70}
               height={70}
-              style={{ width: 'auto', height: 'auto' }} // to remove warning
               priority
             ></Image>
             <h2>Feedback & Support</h2>

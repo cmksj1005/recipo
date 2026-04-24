@@ -66,40 +66,49 @@ export async function POST(req: Request) {
     let recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
     let recipeInstruction: string[];
     let recipeUrl: string;
+    let userEnteredUrl: URL;
 
     // check whether the url is valid or not
-    function checkUrlFormat(urlString: string): boolean {
+    function checkUrlFormat() {
       try {
-        new URL(urlString);
-        return true;
+        userEnteredUrl = new URL(
+          body.url.startsWith('https') ? body.url : `https://${body.url}`,
+        );
+
+        const isYoutube = userEnteredUrl.hostname.includes('youtube.com');
+
+        return isYoutube && userEnteredUrl.pathname !== '/';
       } catch (e) {
         return false;
       }
     }
 
     // if the url is valid
-    if (checkUrlFormat(body.url)) {
+    if (checkUrlFormat()) {
       //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0
       //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
       function getVideoId(urlString: string) {
         if (urlString && URL.canParse(urlString)) {
-          const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
+          // const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
           // shorts URL
           if (urlString.includes('/shorts/')) {
             return body.url.split('/shorts/')[1];
           }
           // short version URL
-          if (url.hostname === 'www.youtu.be' || url.hostname === 'youtu.be') {
-            const videoId: string = url.pathname.startsWith('/')
-              ? url.pathname.substring(1)
-              : url.pathname;
+          if (
+            userEnteredUrl.hostname === 'www.youtu.be' ||
+            userEnteredUrl.hostname === 'youtu.be'
+          ) {
+            const videoId: string = userEnteredUrl.pathname.startsWith('/')
+              ? userEnteredUrl.pathname.substring(1)
+              : userEnteredUrl.pathname;
             return videoId;
           }
           // regular version URL
-          const v = url.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
+          const v = userEnteredUrl.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
           if (
-            (url.hostname === 'www.youtube.com' ||
-              url.hostname === 'youtube.com') &&
+            (userEnteredUrl.hostname === 'www.youtube.com' ||
+              userEnteredUrl.hostname === 'youtube.com') &&
             v
           ) {
             return v;

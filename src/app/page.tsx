@@ -84,7 +84,6 @@ export default function Home() {
           alt="Recipo Logo"
           width={300}
           height={100}
-          style={{ width: 'auto', height: 'auto' }} // to remove warning about width and height
           priority
         />
       </div>
@@ -108,7 +107,6 @@ export default function Home() {
             alt="Invalid URL Notification Icon"
             width={40}
             height={40}
-            style={{ width: 'auto', height: 'auto' }} // to remove warning
           />
         }
         modalTitle="Invalid YouTube URL"
@@ -127,7 +125,6 @@ export default function Home() {
             alt="Invalid URL Notification Icon"
             width={40}
             height={40}
-            style={{ width: 'auto', height: 'auto' }} // to remove warning
           />
         }
         modalTitle="Non-cooking URL"
