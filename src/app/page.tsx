@@ -31,6 +31,8 @@ export default function Home() {
     setInvalidUrlWarning(false);
     setNonCookingRelatedUrlWarning(false);
 
+    // *** I should understand how the react works first and arrange it.s
+
     try {
       const res = await fetch('/api/extract', {
         method: 'POST',
@@ -91,16 +93,10 @@ export default function Home() {
 
       {loading && <Loading />}
 
-      {!loading &&
-        !result &&
-        !invalidUrlWarning &&
-        !nonCookingRelatedUrlWarning && <UserGuide />}
+      {!loading && !result && <UserGuide />}
       {/* if I don't check whether result exists first, it returns error */}
       {/* because the result could be null */}
-      {!loading &&
-        result &&
-        !invalidUrlWarning &&
-        !nonCookingRelatedUrlWarning && <Result data={result} />}
+      {!loading && result && <Result data={result} />}
 
       {/* if user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
