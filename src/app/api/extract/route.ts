@@ -69,11 +69,14 @@ export async function POST(req: Request) {
     let userEnteredUrl: URL;
 
     // check whether the url is valid or not
-    function checkUrlFormat() {
+    function checkUrlFormat(): boolean {
       try {
         userEnteredUrl = new URL(
           body.url.startsWith('https') ? body.url : `https://${body.url}`,
         );
+
+        console.log('This is userEnteredUrl');
+        console.log(userEnteredUrl);
 
         const isYoutube = userEnteredUrl.hostname.includes('youtube.com');
 

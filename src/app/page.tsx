@@ -31,8 +31,6 @@ export default function Home() {
     setInvalidUrlWarning(false);
     setNonCookingRelatedUrlWarning(false);
 
-    // *** I should understand how the react works first and arrange it.s
-
     try {
       const res = await fetch('/api/extract', {
         method: 'POST',
