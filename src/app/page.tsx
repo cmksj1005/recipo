@@ -42,20 +42,16 @@ export default function Home() {
         body: JSON.stringify({ url }),
       });
 
+      // get recipe information from route.ts
       const data = await res.json();
 
-      // if url is invalid, set showNotification to true
+      // if url is invalid, set invalidUrlWarning to true
       if (data.recipeResult.invalidUrl) {
         setInvalidUrlWarning(true);
         return;
       }
 
-      // if (data.error === 'Invalid YouTube URL') {
-      //   setInvalidUrlWarning(true);
-      //   return;
-      // }
-
-      // if url is invalid, set showNotification to true
+      // if url is non-cooking-related, set nonCookingRelatedUrlWarning to true
       if (data.recipeResult.nonCookingRelated) {
         setNonCookingRelatedUrlWarning(true);
         return;
@@ -71,12 +67,14 @@ export default function Home() {
 
   return (
     <>
+      {/* Main Page */}
       {/* screen reader only */}
       <h1 className="sr-only">Recipo</h1>
       <div className={styles.logoWrapper}>
         {/* Used <Image> instead of <img> 
         because it automatically optimizes images 
         (resize, lazy-load, and improve performance) without extra work. */}
+        {/* Recipo Logo */}
         <Image
           src="/logo.png"
           alt="Recipo Logo"
@@ -86,16 +84,19 @@ export default function Home() {
         />
       </div>
 
+      {/* Recipo Searchbar */}
       <Searchbar handleSubmit={handleSubmit} />
 
+      {/* Display loading animation while backend part is processing for recipe */}
       {loading && <Loading />}
 
+      {/* User Guide which users can see in the main page before searching url */}
       {!loading && !result && <UserGuide />}
-      {/* if I don't check whether result exists first, it returns error */}
-      {/* because the result could be null */}
+
+      {/* Display result after finishing the process from back-end part */}
       {!loading && result && <Result data={result} />}
 
-      {/* if user enters invalid url, Warning Notification will be displayed. */}
+      {/* If user enters invalid url, Warning Notification will be displayed. */}
       <NotificationModal
         open={invalidUrlWarning}
         onOpenChange={setInvalidUrlWarning}
@@ -107,13 +108,11 @@ export default function Home() {
             height={40}
           />
         }
-        modalTitle="Invalid YouTube URL"
-        description={
-          'Please enter a valid YouTube video link.\n(e.g., https://www.youtube.com/...)'
-        }
+        modalTitle="Invalid YouTube Link"
+        description="Please enter a valid YouTube video link."
       />
 
-      {/* if user enters non-cooking-related url, Warning Notification will be displayed. */}
+      {/* If user enters non-cooking-related url, Warning Notification will be displayed. */}
       <NotificationModal
         open={nonCookingRelatedUrlWarning}
         onOpenChange={setNonCookingRelatedUrlWarning}
@@ -125,8 +124,8 @@ export default function Home() {
             height={40}
           />
         }
-        modalTitle="Non-cooking URL"
-        description={'Please enter cooking related url'}
+        modalTitle="Not a Cooking Video"
+        description="Please enter a YouTube link related to cooking."
       />
     </>
   );

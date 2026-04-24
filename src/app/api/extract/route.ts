@@ -75,9 +75,6 @@ export async function POST(req: Request) {
           body.url.startsWith('https') ? body.url : `https://${body.url}`,
         );
 
-        console.log('This is userEnteredUrl');
-        console.log(userEnteredUrl);
-
         const isYoutube = userEnteredUrl.hostname.includes('youtube.com');
 
         return isYoutube && userEnteredUrl.pathname !== '/';
@@ -92,7 +89,6 @@ export async function POST(req: Request) {
       //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
       function getVideoId(urlString: string) {
         if (urlString && URL.canParse(urlString)) {
-          // const url = new URL(urlString); // you can access parts like url.hostname, url.pathname, url.searchParams.
           // shorts URL
           if (urlString.includes('/shorts/')) {
             return body.url.split('/shorts/')[1];
@@ -156,10 +152,6 @@ export async function POST(req: Request) {
         recipeInstruction = [];
         recipeUrl = '';
       } else {
-        // *** remove it before deploy this webapp ***
-        console.log('This is gpt answer');
-        console.log(gptAnswer);
-
         nonCookingRelated = false;
 
         const splitGptAnswer = gptAnswer.split('|');
@@ -192,10 +184,6 @@ export async function POST(req: Request) {
         }
 
         parseIngredients(allRecipeIngredients);
-
-        // ***** remove it before deploy this webapp *****
-        console.log('this is ingredients');
-        console.log(recipeIngredients);
 
         recipeInstruction = splitGptAnswer[2].split('#');
 

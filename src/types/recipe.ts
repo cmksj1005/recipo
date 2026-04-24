@@ -12,3 +12,11 @@ export type RecipeIngredients = {
   quantity: number | null;
   unit: string;
 };
+
+export type SearchbarProps = {
+  handleSubmit: (url: string) => Promise<void>;
+};
+
+export type ResultProps = {
+  data: RecipeResult;
+};

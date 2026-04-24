@@ -24,7 +24,7 @@ export default function NotificationModal({
   description: string;
 }) {
   return (
-    // onOpenChange: when user close the modal, it becomes 'false'
+    // onOpenChange => when user close the modal, it becomes 'false'
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={styles.dialogContent}>
         <DialogHeader>

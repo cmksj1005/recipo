@@ -2,15 +2,10 @@
 
 import { useState } from 'react';
 import styles from './Searchbar.module.css';
-
-type SearchbarProps = {
-  handleSubmit: (url: string) => Promise<void> | void;
-  // loading: boolean;
-};
+import { SearchbarProps } from '@/types/recipe';
 
 export default function Searchbar({ handleSubmit }: SearchbarProps) {
   const [url, setUrl] = useState(''); // to save url that user enters
-  // useState(false); // to display non-cooking-related url warning modal
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     // // Prevent default browser action

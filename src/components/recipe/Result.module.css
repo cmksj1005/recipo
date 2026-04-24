@@ -39,3 +39,15 @@
 .ingredientsWrapper {
   border-right: 1px solid rgba(255, 189, 35, 0.874);
 }
+
+.sectionHeading {
+  color: rgba(128, 128, 128, 0.72);
+  font-weight: 1000;
+  font-size: 20px;
+}
+
+.ingredientItem {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.5px dashed grey;
+}

@@ -1,13 +1,10 @@
 import styles from '@/components/recipe/Result.module.css';
-import { RecipeResult } from '@/types/recipe';
+import { ResultProps } from '@/types/recipe';
 
-type resultProp = {
-  data: RecipeResult;
-};
-
-export default function Result({ data }: resultProp) {
+export default function Result({ data }: ResultProps) {
   return (
     <>
+      {/* Recipe Video */}
       <div className={styles.VideoWrapper}>
         <iframe
           className={styles.recipeVideo}
@@ -15,9 +12,11 @@ export default function Result({ data }: resultProp) {
           allow="web-share; fullscreen"
         ></iframe>
       </div>
+      {/* Recipe Title */}
       <h2 className={styles.recipeTitle}>{data.title}</h2>
       <div className={styles.recipeWrapper}>
         <div className={styles.ingredientsWrapper}>
+          {/* Recipe Ingredients */}
           <h3 className={styles.sectionHeading}>Ingredients</h3>
           <ol>
             {data.ingredients.map((ingredient) => (
@@ -30,7 +29,7 @@ export default function Result({ data }: resultProp) {
             ))}
           </ol>
         </div>
-
+        {/* Recipe Instruction */}
         <div className={styles.instructionsWrapper}>
           <h3 className={styles.sectionHeading}>Instructions</h3>
           <ol>
