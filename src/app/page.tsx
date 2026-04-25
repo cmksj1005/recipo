@@ -16,7 +16,6 @@ import NotificationModal from '@/components/modals/NotificationModal';
 import UserGuide from '@/components/recipe/UserGuide';
 import Result from '@/components/recipe/Result';
 import Loading from '@/components/recipe/Loading';
-import Link from 'next/link';
 
 export default function Home() {
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
@@ -112,7 +111,9 @@ export default function Home() {
           />
         }
         modalTitle="Invalid YouTube Link"
-        description="Please enter a valid YouTube video link."
+        description={
+          'Please enter a valid YouTube video link.\n\nIf the video is valid, it may not have a transcript or enough spoken content to generate a recipe.'
+        }
       />
 
       {/* If user enters non-cooking-related url, Warning Notification will be displayed. */}
