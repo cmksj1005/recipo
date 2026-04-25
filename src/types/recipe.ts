@@ -1,3 +1,7 @@
+export type RequestBody = {
+  url: string;
+};
+
 export type RecipeResult = {
   invalidUrl: boolean;
   nonCookingRelated: boolean;

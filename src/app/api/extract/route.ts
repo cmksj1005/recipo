@@ -3,20 +3,44 @@
 // =====================================================================
 
 import { fetchTranscript, TranscriptResponse } from 'youtube-transcript';
-import type { RecipeResult, RecipeIngredients } from '@/types/recipe';
 import OpenAI from 'openai';
+import type {
+  RequestBody,
+  RecipeResult,
+  RecipeIngredients,
+} from '@/types/recipe';
+
 // This 'client' is the thing you use to talk to OpenAI
 const client = new OpenAI();
 
 export async function POST(req: Request) {
-  try {
-    type RequestBody = {
-      url: string;
+  // return this result when the url is invalid or non-cooking-related
+  function createRecipeResult(overrides: Partial<RecipeResult>): {
+    recipeResult: RecipeResult;
+  } {
+    return {
+      recipeResult: {
+        invalidUrl: false,
+        nonCookingRelated: false,
+        title: '',
+        ingredients: [],
+        instruction: [],
+        embedUrl: '',
+        ...overrides, // copy all properties from the overrides object into here.
+      },
     };
+  }
 
-    const body: RequestBody = await req.json();
+  try {
+    let recipeTitle: string;
+    const recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
+    let recipeInstruction: string[];
+    let recipeUrl: string;
+    let userEnteredUrl: URL;
+    let nonCookingRelated: boolean;
+    let invalidUrl: boolean;
 
-    /// Recipe extraction prompt
+    /// additional prompt to make the result better
     const instructionForGpt = `
       You will receive a YouTube transcript.
 
@@ -60,13 +84,7 @@ export async function POST(req: Request) {
       Honey Chicken|chicken (500g), salt (1 tsp), oil (2 tbsp)|season the chicken with salt#heat oil over medium heat for 5 minutes#fry the chicken for 10 minutes until golden
       `;
 
-    let nonCookingRelated: boolean;
-    let invalidUrl: boolean;
-    let recipeTitle: string;
-    let recipeIngredients: RecipeIngredients[] = []; // I need '= []' to use .push()
-    let recipeInstruction: string[];
-    let recipeUrl: string;
-    let userEnteredUrl: URL;
+    const body: RequestBody = await req.json();
 
     // check whether the url is valid or not
     function checkUrlFormat(): boolean {
@@ -117,41 +135,24 @@ export async function POST(req: Request) {
 
       const videoId = getVideoId(body.url);
 
+      // If videoId is undefined, it returns result for invalid url
       if (!videoId) {
-        return Response.json({ error: 'Invalid YouTube URL' }, { status: 400 });
+        return Response.json(createRecipeResult({ invalidUrl: true }));
       }
 
-      // extract transcript from the youtube video
-      // it returns an array of objects
-      // ****** should start with this part ******
-      let transcript: TranscriptResponse[];
-
-      try {
-        transcript = await fetchTranscript(videoId);
-      } catch (e) {
-        console.error('Transcript error:', e);
-
-        return Response.json({
-          recipeResult: {
-            invalidUrl: true,
-            nonCookingRelated: false,
-            title: '',
-            ingredients: [],
-            instruction: [],
-            embedUrl: '',
-          },
-        });
-      }
+      // Extract transcript from the youtube video
+      // It returns an array of objects
+      const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
 
       let transcriptTextParts = '';
 
-      // concatenate all the texts from the transcript
+      // Concatenate all the texts from the transcript
       for (const item of transcript) {
         transcriptTextParts += item.text;
         // Better code: const transcriptTextParts = transcript.map(item => item.text).join(' ');
       }
 
-      // get answer from chatgpt
+      // Get answer from chatgpt
       const response = await client.responses.create({
         model: 'gpt-4o',
         input: transcriptTextParts + instructionForGpt,
@@ -159,29 +160,26 @@ export async function POST(req: Request) {
 
       const gptAnswer: string = response.output_text;
 
-      // if url is non-cooking-related,
+      // If url is non-cooking-related,
       if (gptAnswer == 'N') {
-        nonCookingRelated = true;
-        invalidUrl = false;
-        recipeTitle = '';
-        recipeIngredients = [];
-        recipeInstruction = [];
-        recipeUrl = '';
+        return Response.json(createRecipeResult({ nonCookingRelated: true }));
       } else {
+        invalidUrl = false;
         nonCookingRelated = false;
 
+        // Parse gpt answer into specific information such as title, ingredients, instructions, url to make return value.
         const splitGptAnswer = gptAnswer.split('|');
         recipeTitle = splitGptAnswer[0];
         const allRecipeIngredients = splitGptAnswer[1].split(',');
 
-        // get name, quantity, unit from ingredients sentence from chat gpt
+        // Get name, quantity, unit from ingredients sentence from chat gpt
         function parseIngredients(ingredients: string[]) {
           for (const ingredient of ingredients) {
             const ingreName = ingredient.split('(')[0].replace(')', '').trim();
             const ingreQuantity = ingredient.split('(')[1];
             const parsedQuantity = ingreQuantity.replace(')', '').trim();
 
-            // divide to quantity and unit
+            // Divide to quantity and unit
             const match = parsedQuantity.match(
               /^(\d+(?:\.\d+)?)\s*([a-zA-Z]*)/,
             );
@@ -208,38 +206,28 @@ export async function POST(req: Request) {
           const embedUrl = `https://www.youtube.com/embed/${id}`;
           return embedUrl;
         }
-
-        invalidUrl = false;
         recipeUrl = youtubeUrlToEmbed(videoId);
       }
+
+      const recipeResult: RecipeResult = {
+        invalidUrl: invalidUrl,
+        nonCookingRelated: nonCookingRelated,
+        title: recipeTitle,
+        ingredients: recipeIngredients,
+        instruction: recipeInstruction,
+        embedUrl: recipeUrl,
+      };
+
+      return Response.json({
+        recipeResult,
+      });
     } else {
       // if the url is not valid
-      invalidUrl = true;
-      nonCookingRelated = false;
-      recipeTitle = '';
-      recipeIngredients = [];
-      recipeInstruction = [];
-      recipeUrl = '';
+      return Response.json(createRecipeResult({ invalidUrl: true }));
     }
-
-    console.log('This is invalid url');
-
-    console.log(invalidUrl);
-
-    const recipeResult: RecipeResult = {
-      invalidUrl: invalidUrl,
-      nonCookingRelated: nonCookingRelated,
-      title: recipeTitle,
-      ingredients: recipeIngredients,
-      instruction: recipeInstruction,
-      embedUrl: recipeUrl,
-    };
-
-    return Response.json({
-      recipeResult,
-    });
   } catch (err) {
-    console.error(err);
-    return Response.json({ error: 'Server error' }, { status: 500 });
+    console.error('Error from route.ts: ', err);
+
+    return Response.json(createRecipeResult({ invalidUrl: true }));
   }
 }
