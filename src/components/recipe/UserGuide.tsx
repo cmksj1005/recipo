@@ -8,6 +8,7 @@ export default function Instructions() {
         <div className={styles.guideSection}>
           <div className={styles.guideTitle}>
             <Image
+              className="w-[50px] md:w-[70px] h-auto"
               src="/icons/questionIcon.png"
               alt="question mark icon"
               width={70}
@@ -30,6 +31,7 @@ export default function Instructions() {
         <div className={styles.guideSection}>
           <div className={styles.guideTitle}>
             <Image
+              className="w-[50px] md:w-[70px] h-auto"
               src="/icons/starIcon.png"
               alt="question mark icon"
               width={70}
@@ -62,6 +64,7 @@ export default function Instructions() {
         <div className={styles.guideSection}>
           <div className={styles.guideTitle}>
             <Image
+              className="w-[50px] md:w-[70px] h-auto"
               src="/icons/conversationIcon.png"
               alt="question mark icon"
               width={70}

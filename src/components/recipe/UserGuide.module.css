@@ -34,3 +34,18 @@
 .userGuide ul li {
   font-size: 20px;
 }
+
+/* Smart Phone Screen */
+@media (max-width: 767px) {
+  .userGuide {
+    text-align: start;
+  }
+
+  .guideTitle h2 {
+    font-size: 20px;
+  }
+
+  .userGuide ul li {
+    font-size: 15px;
+  }
+}

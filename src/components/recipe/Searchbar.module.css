@@ -37,3 +37,46 @@
   cursor: pointer;
   height: 50px;
 }
+
+/* Smart Phone Screen */
+@media (max-width: 450px) {
+  .searchbarForm {
+    height: 40px;
+    width: 100%;
+    padding: 0 50px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .searchbarWrapper {
+    width: 100%;
+    max-width: 700px;
+    height: 40px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .searchBar {
+    width: 100%;
+    height: 100%;
+    border: 0.5px solid grey;
+    border-radius: 30px;
+    padding-left: 20px;
+    padding-right: 50px;
+    /* border-box: padding stays inside the width, so it does not overflow */
+    box-sizing: border-box;
+    position: absolute;
+  }
+
+  .searchButtonWrapper {
+    height: 40px;
+    position: absolute;
+    margin-right: 15px;
+  }
+
+  .submitButton {
+    cursor: pointer;
+    height: 40px;
+  }
+}

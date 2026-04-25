@@ -76,6 +76,7 @@ export default function Home() {
         (resize, lazy-load, and improve performance) without extra work. */}
         {/* Recipo Logo */}
         <Image
+          className="w-[200px] md:w-[300px] h-auto"
           src="/logo.png"
           alt="Recipo Logo"
           width={300}
