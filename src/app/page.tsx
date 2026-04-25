@@ -8,14 +8,14 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './page.module.css';
-import Searchbar from '@/components/recipe/Searchbar';
 import type { RecipeResult } from '@/types/recipe';
 import Image from 'next/image';
-import NotificationModal from '@/components/modals/NotificationModal';
+import Logo from '@/components/recipe/Logo';
+import Searchbar from '@/components/recipe/Searchbar';
 import UserGuide from '@/components/recipe/UserGuide';
 import Result from '@/components/recipe/Result';
 import Loading from '@/components/recipe/Loading';
+import NotificationModal from '@/components/modals/NotificationModal';
 
 export default function Home() {
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
@@ -67,27 +67,10 @@ export default function Home() {
 
   return (
     <>
-      {/* Main Page */}
-      {/* screen reader only */}
-      <h1 className="sr-only">Recipo</h1>
-      <div className={styles.logoWrapper}>
-        {/* Used <Image> instead of <img> 
-        because it automatically optimizes images 
-        (resize, lazy-load, and improve performance) without extra work. */}
-        {/* Recipo Logo */}
-        <Image
-          className="w-[200px] md:w-[300px] h-auto cursor-pointer"
-          src="/logo.png"
-          alt="Recipo Logo"
-          width={300}
-          height={100}
-          priority
-          onClick={() => window.location.reload()}
-        />
-      </div>
+      {/* <Logo /> */}
 
       {/* Recipo Searchbar */}
-      <Searchbar handleSubmit={handleSubmit} />
+      {/* <Searchbar handleSubmit={handleSubmit} /> */}
 
       {/* Display loading animation while backend part is processing for recipe */}
       {loading && <Loading />}
