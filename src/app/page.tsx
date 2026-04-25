@@ -16,6 +16,7 @@ import NotificationModal from '@/components/modals/NotificationModal';
 import UserGuide from '@/components/recipe/UserGuide';
 import Result from '@/components/recipe/Result';
 import Loading from '@/components/recipe/Loading';
+import Link from 'next/link';
 
 export default function Home() {
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
@@ -82,6 +83,7 @@ export default function Home() {
           width={300}
           height={100}
           priority
+          onClick={() => window.location.reload()}
         />
       </div>
 
