@@ -8,6 +8,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { RecipeResult } from '@/types/recipe';
 import Image from 'next/image';
 import Logo from '@/components/recipe/Logo';
@@ -18,6 +19,7 @@ import Loading from '@/components/recipe/Loading';
 import NotificationModal from '@/components/modals/NotificationModal';
 
 export default function Home() {
+  const router = useRouter(); // It should be at the top level of the component
   const [result, setResult] = useState<RecipeResult | null>(null); // to save result from chatgpt
   const [loading, setLoading] = useState(false); // for loading spinner
   const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
@@ -57,7 +59,12 @@ export default function Home() {
         return;
       }
 
-      setResult(data.recipeResult);
+      // sessionStorage can only store strings
+      sessionStorage.setItem('recipeResult', JSON.stringify(data.recipeResult));
+
+      router.push('/recipe');
+
+      // setResult(data.recipeResult);
     } catch (error) {
       console.error(error);
     } finally {
