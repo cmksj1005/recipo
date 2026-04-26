@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Overpass, Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import Logo from '@/components/recipe/Logo';
-import Searchbar from '@/components/recipe/Searchbar';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
