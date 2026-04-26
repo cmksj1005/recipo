@@ -34,12 +34,7 @@ export default function RootLayout({
         geist.variable,
       )}
     >
-      <body className={`min-h-full flex flex-col`}>
-        <Logo />
-        <Searchbar handleSubmit={handleSubmit} />
-
-        {children}
-      </body>
+      <body className={`min-h-full flex flex-col`}>{children}</body>
     </html>
   );
 }

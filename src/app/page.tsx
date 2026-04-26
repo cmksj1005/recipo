@@ -10,8 +10,8 @@
 import { useState } from 'react';
 import type { RecipeResult } from '@/types/recipe';
 import Image from 'next/image';
-import Logo from '@/components/recipe/Logo';
-import Searchbar from '@/components/recipe/Searchbar';
+// import Logo from '@/components/recipe/Logo';
+// import Searchbar from '@/components/recipe/Searchbar';
 import UserGuide from '@/components/recipe/UserGuide';
 import Result from '@/components/recipe/Result';
 import Loading from '@/components/recipe/Loading';
