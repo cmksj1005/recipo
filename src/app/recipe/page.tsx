@@ -6,6 +6,8 @@
 
 import { useRouter } from 'next/navigation';
 import { RecipeResult } from '@/types/recipe';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import Logo from '@/components/recipe/Logo';
 import Result from '@/components/recipe/Result';
 import NotificationModal from '@/components/modals/NotificationModal';
@@ -20,10 +22,10 @@ export default function RecipePage() {
   // window represents the browser environment.
   // typeof window === "object" -> browser (client)
   // typeof window === "undefined" -> server
-  //
+
   const recipeFromSession =
     // I can only use sessionStorage in the browser,
-    // so I check if I'm in the browser using 'window !== undefined'
+    // so I check if it is in the browser using 'window !== undefined'
     typeof window !== 'undefined'
       ? sessionStorage.getItem('recipeResult')
       : null;
@@ -43,6 +45,10 @@ export default function RecipePage() {
 
       {/* Display result after finishing the process from back-end part */}
       {recipe && <Result data={recipe} />}
+
+      <Button>
+        <Link href="/">Go Home</Link>
+      </Button>
 
       {/* If user goes to recipe page without searching, Warning notification will be displayed */}
       <NotificationModal

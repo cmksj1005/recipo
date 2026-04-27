@@ -22,11 +22,6 @@ export default function Home() {
   const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
     useState(false); // to display non-cooking-related url warning modal
 
-  // useEffect runs AFTER render
-  useEffect(() => {
-    sessionStorage.removeItem('recipeResult');
-  }, []);
-
   // when user enters url, this function will be called.
   async function handleSubmit(url: string) {
     setLoading(true);
