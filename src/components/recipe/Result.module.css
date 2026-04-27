@@ -1,5 +1,5 @@
 .VideoWrapper {
-  margin: 50px;
+  margin: 20px 50px 50px 50px;
   display: flex;
   justify-content: center;
 }

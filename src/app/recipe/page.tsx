@@ -14,13 +14,25 @@ import Image from 'next/image';
 export default function RecipePage() {
   //get recipe from session storage and display it on the screen
   const router = useRouter();
-  const recipeFromSession = sessionStorage.getItem('recipeResult');
   let recipeNullWarning: boolean = false;
+
+  // sessionStorage is actually window.sessionStorage.
+  // window represents the browser environment.
+  // typeof window === "object" -> browser (client)
+  // typeof window === "undefined" -> server
+  //
+  const recipeFromSession =
+    // I can only use sessionStorage in the browser,
+    // so I check if I'm in the browser using 'window !== undefined'
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('recipeResult')
+      : null;
 
   const recipe: RecipeResult | null = recipeFromSession
     ? JSON.parse(recipeFromSession)
     : null;
 
+  // if recipe is null, display warning notification
   if (!recipe) {
     recipeNullWarning = true;
   }

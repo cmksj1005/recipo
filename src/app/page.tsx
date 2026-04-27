@@ -2,9 +2,6 @@
 // Main page: handles user input and sends request to API
 // ======================================================
 
-// page.tsx -> Server Component (data, layout)
-// separate file -> Client Component (input, buttons)
-// Since this project is a simple one, I used 'use client' to make it Client Component
 'use client';
 
 import { useState, useEffect } from 'react';
