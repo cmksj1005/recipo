@@ -14,7 +14,6 @@ import Image from 'next/image';
 import Logo from '@/components/recipe/Logo';
 import Searchbar from '@/components/recipe/Searchbar';
 import UserGuide from '@/components/recipe/UserGuide';
-import Result from '@/components/recipe/Result';
 import Loading from '@/components/recipe/Loading';
 import NotificationModal from '@/components/modals/NotificationModal';
 
@@ -90,10 +89,7 @@ export default function Home() {
       {/* User Guide which users can see in the main page before searching url */}
       {!loading && !result && <UserGuide />}
 
-      {/* Display result after finishing the process from back-end part */}
-      {!loading && result && <Result data={result} />}
-
-      {/* If user enters invalid url, Warning Notification will be displayed. */}
+      {/* If user enters invalid url, Warning notification will be displayed. */}
       <NotificationModal
         open={invalidUrlWarning}
         onOpenChange={setInvalidUrlWarning}
@@ -111,7 +107,7 @@ export default function Home() {
         }
       />
 
-      {/* If user enters non-cooking-related url, Warning Notification will be displayed. */}
+      {/* If user enters non-cooking-related url, Warning notification will be displayed. */}
       <NotificationModal
         open={nonCookingRelatedUrlWarning}
         onOpenChange={setNonCookingRelatedUrlWarning}

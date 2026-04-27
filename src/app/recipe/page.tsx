@@ -1,32 +1,29 @@
+// ========================================================================
+// Result page: get recipeResult from back-end and display it on the screen
+// ========================================================================
+
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import { RecipeResult } from '@/types/recipe';
 import Logo from '@/components/recipe/Logo';
 import Result from '@/components/recipe/Result';
 import NotificationModal from '@/components/modals/NotificationModal';
 import Image from 'next/image';
-// import Searchbar from '@/components/recipe/Searchbar';
 
 export default function RecipePage() {
+  //get recipe from session storage and display it on the screen
   const router = useRouter();
-  const [recipeNullWarning, setRecipeNullWaring] = useState(false);
+  const recipeFromSession = sessionStorage.getItem('recipeResult');
+  let recipeNullWarning: boolean = false;
 
-  useEffect(() => {
-    const storedRecipe = sessionStorage.getItem('recipeResult');
+  const recipe: RecipeResult | null = recipeFromSession
+    ? JSON.parse(recipeFromSession)
+    : null;
 
-    let recipe: RecipeResult | null = null;
-
-    if (storedRecipe) {
-      recipe = JSON.parse(storedRecipe);
-    }
-
-    if (!recipe) {
-      setRecipeNullWaring(true);
-      console.log('This error is from RecipePage because recipe has null');
-    }
-  });
+  if (!recipe) {
+    recipeNullWarning = true;
+  }
 
   return (
     <>
@@ -35,13 +32,11 @@ export default function RecipePage() {
       {/* Display result after finishing the process from back-end part */}
       {recipe && <Result data={recipe} />}
 
+      {/* If user goes to recipe page without searching, Warning notification will be displayed */}
       <NotificationModal
         open={recipeNullWarning}
-        onOpenChange={(open) => {
-          setRecipeNullWaring(open);
-          if (!open) {
-            router.push('/');
-          }
+        onOpenChange={() => {
+          router.push('/');
         }}
         titleImage={
           <Image
@@ -51,10 +46,8 @@ export default function RecipePage() {
             height={40}
           />
         }
-        modalTitle="Invalid YouTube Link"
-        description={
-          'Please enter a valid YouTube video link.\n\nIf the video is valid, it may not have a transcript or enough spoken content to generate a recipe.'
-        }
+        modalTitle="Recipe Not Found"
+        description="No recipe result was found. Please search again from the main page."
       />
     </>
   );
