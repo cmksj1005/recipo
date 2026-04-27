@@ -1,7 +1,7 @@
 import styles from './UserGuide.module.css';
 import Image from 'next/image';
 
-export default function Instructions() {
+export default function UserGuide() {
   return (
     <div className={styles.userGuideWrapper}>
       <div className={styles.userGuide}>

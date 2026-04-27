@@ -6,11 +6,10 @@
 
 import { useRouter } from 'next/navigation';
 import { RecipeResult } from '@/types/recipe';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import Logo from '@/components/recipe/Logo';
 import Result from '@/components/recipe/Result';
 import NotificationModal from '@/components/modals/NotificationModal';
+import GoHomeButton from '@/components/buttons/GoHomeButton';
 import Image from 'next/image';
 
 export default function RecipePage() {
@@ -46,9 +45,7 @@ export default function RecipePage() {
       {/* Display result after finishing the process from back-end part */}
       {recipe && <Result data={recipe} />}
 
-      <Button>
-        <Link href="/">Go Home</Link>
-      </Button>
+      <GoHomeButton />
 
       {/* If user goes to recipe page without searching, Warning notification will be displayed */}
       <NotificationModal
