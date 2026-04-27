@@ -32,11 +32,9 @@ export default function Result({ data }: ResultProps) {
         {/* Recipe Instruction */}
         <div className={styles.instructionsWrapper}>
           <h3 className={styles.sectionHeading}>Instructions</h3>
-          <ol>
+          <ol className="list-decimal pl-4">
             {data.instruction.map((step, index) => (
-              <li key={index}>
-                {index + 1}. {step}
-              </li>
+              <li key={index}>{step}</li>
             ))}
           </ol>
         </div>

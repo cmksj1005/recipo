@@ -76,8 +76,11 @@ export default function UserGuide() {
           <ul>
             <li>
               If you encounter any{' '}
-              <strong>errors, bugs, or unexpected results</strong>, please let
-              me know.
+              <strong>errors, bugs, or unexpected results</strong>, please
+              report it to{' '}
+              <strong className="underline">
+                <a href="mailto:recipo77@gmail.com">recipo77@gmail.com</a>
+              </strong>
             </li>
             <li>
               Your feedback is extremely valuable and helps improve the
