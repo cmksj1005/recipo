@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RecipeResult } from '@/types/recipe';
 import Logo from '@/components/recipe/Logo';
 import Result from '@/components/recipe/Result';
@@ -11,19 +11,22 @@ import Image from 'next/image';
 
 export default function RecipePage() {
   const router = useRouter();
-  const storedRecipe = sessionStorage.getItem('recipeResult');
-  const [recipeNullWarning, SetRecipeNullWaring] = useState(false);
-  let recipe: RecipeResult | null = null;
+  const [recipeNullWarning, setRecipeNullWaring] = useState(false);
 
-  if (storedRecipe) {
-    recipe = JSON.parse(storedRecipe);
-  }
+  useEffect(() => {
+    const storedRecipe = sessionStorage.getItem('recipeResult');
 
-  if (!recipe) {
-    console.error('This error is from RecipePage because recipe has null');
-    SetRecipeNullWaring(true);
-    router.push('/');
-  }
+    let recipe: RecipeResult | null = null;
+
+    if (storedRecipe) {
+      recipe = JSON.parse(storedRecipe);
+    }
+
+    if (!recipe) {
+      setRecipeNullWaring(true);
+      console.log('This error is from RecipePage because recipe has null');
+    }
+  });
 
   return (
     <>
@@ -34,11 +37,16 @@ export default function RecipePage() {
 
       <NotificationModal
         open={recipeNullWarning}
-        onOpenChange={SetRecipeNullWaring}
+        onOpenChange={(open) => {
+          setRecipeNullWaring(open);
+          if (!open) {
+            router.push('/');
+          }
+        }}
         titleImage={
           <Image
             src="/icons/embarrassedIcon.png"
-            alt="Invalid URL Notification Icon"
+            alt="Warning Icon"
             width={40}
             height={40}
           />

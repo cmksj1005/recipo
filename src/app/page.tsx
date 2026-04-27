@@ -7,7 +7,7 @@
 // Since this project is a simple one, I used 'use client' to make it Client Component
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeResult } from '@/types/recipe';
 import Image from 'next/image';
@@ -25,6 +25,11 @@ export default function Home() {
   const [invalidUrlWarning, setInvalidUrlWarning] = useState(false); // to display invalid url warning modal
   const [nonCookingRelatedUrlWarning, setNonCookingRelatedUrlWarning] =
     useState(false); // to display non-cooking-related url warning modal
+
+  // useEffect runs AFTER render
+  useEffect(() => {
+    sessionStorage.removeItem('recipeResult');
+  }, []);
 
   // when user enters url, this function will be called.
   async function handleSubmit(url: string) {
@@ -95,7 +100,7 @@ export default function Home() {
         titleImage={
           <Image
             src="/icons/embarrassedIcon.png"
-            alt="Invalid URL Notification Icon"
+            alt="Warning Icon"
             width={40}
             height={40}
           />
@@ -113,7 +118,7 @@ export default function Home() {
         titleImage={
           <Image
             src="/icons/embarrassedIcon.png"
-            alt="Invalid URL Notification Icon"
+            alt="Warning Icon"
             width={40}
             height={40}
           />
