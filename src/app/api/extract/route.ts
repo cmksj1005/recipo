@@ -135,6 +135,9 @@ export async function POST(req: Request) {
 
       const videoId = getVideoId(body.url);
 
+      console.error('Error!!!');
+      console.error(videoId);
+
       // If videoId is undefined, it returns result for invalid url
       if (!videoId) {
         return Response.json(createRecipeResult({ invalidUrl: true }));
