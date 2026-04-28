@@ -133,19 +133,31 @@ export async function POST(req: Request) {
         }
       }
 
-      const videoId = getVideoId(body.url);
-
-      console.error('Error!!!');
-      console.error(videoId);
+      let videoId = getVideoId(body.url);
 
       // If videoId is undefined, it returns result for invalid url
       if (!videoId) {
         return Response.json(createRecipeResult({ invalidUrl: true }));
       }
 
+      videoId = 'https://www.youtube.com/shorts/iGABdElgaLk';
+
+      // new code
+
+      const API_KEY = process.env.TRANSCRIPT_API_KEY;
+      const url = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoId)}&format=json`;
+      const res = await fetch(url, {
+        headers: { Authorization: 'Bearer ' + API_KEY },
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const transcript = await res.json();
+      console.log(transcript.transcript);
+
+      // new code
+
       // Extract transcript from the youtube video
       // It returns an array of objects
-      const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
+      // const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
 
       let transcriptTextParts = '';
 
