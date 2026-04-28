@@ -24,8 +24,8 @@ jobs:
           node-version: '22.x'
 
       - name: Install dependencies
-        run: npm install
-      
+        run: npm ci
+
       - name: Build app
         run: npm run build
         env:
@@ -36,7 +36,7 @@ jobs:
           cp -r public .next/standalone/public
           mkdir -p .next/standalone/.next
           cp -r .next/static .next/standalone/.next/static
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -55,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -70,4 +70,3 @@ jobs:
           app-name: 'recipo-web'
           slot-name: 'Production'
           package: .
-          
