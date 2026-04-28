@@ -2,7 +2,6 @@
 // API route: receives request, calls APIs, and returns result as JSON
 // =====================================================================
 
-import { fetchTranscript, TranscriptResponse } from 'youtube-transcript';
 import OpenAI from 'openai';
 import type {
   RequestBody,
@@ -141,8 +140,8 @@ export async function POST(req: Request) {
         return Response.json(createRecipeResult({ invalidUrl: true }));
       }
 
-      // new code
-
+      // Extract transcript from the youtube video
+      // It returns an array of objects
       const API_KEY = process.env.TRANSCRIPT_API_KEY;
       const url = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoUrl)}&format=json`;
       const res = await fetch(url, {
@@ -150,13 +149,6 @@ export async function POST(req: Request) {
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      console.log(data.transcript);
-
-      // new code
-
-      // Extract transcript from the youtube video
-      // It returns an array of objects
-      // const transcript: TranscriptResponse[] = await fetchTranscript(videoId);
 
       let transcriptTextParts = '';
 
