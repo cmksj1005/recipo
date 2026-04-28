@@ -7,7 +7,7 @@ export default function GoHomeButton() {
       <div className={styles.buttonWrapper}>
         <button className="w-30 h-auto">
           <Link href="/">
-            <div className={styles.buttonTitle}>Main</div>
+            <div className={styles.buttonTitle}>Go Home</div>
           </Link>
         </button>
       </div>
