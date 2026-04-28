@@ -133,25 +133,24 @@ export async function POST(req: Request) {
         }
       }
 
-      let videoId = getVideoId(body.url);
+      const videoId = getVideoId(body.url);
+      const videoUrl = body.url;
 
       // If videoId is undefined, it returns result for invalid url
-      if (!videoId) {
+      if (!videoUrl || !videoId) {
         return Response.json(createRecipeResult({ invalidUrl: true }));
       }
-
-      videoId = 'https://www.youtube.com/shorts/iGABdElgaLk';
 
       // new code
 
       const API_KEY = process.env.TRANSCRIPT_API_KEY;
-      const url = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoId)}&format=json`;
+      const url = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoUrl)}&format=json`;
       const res = await fetch(url, {
         headers: { Authorization: 'Bearer ' + API_KEY },
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const transcript = await res.json();
-      console.log(transcript.transcript);
+      const data = await res.json();
+      console.log(data.transcript);
 
       // new code
 
@@ -162,7 +161,7 @@ export async function POST(req: Request) {
       let transcriptTextParts = '';
 
       // Concatenate all the texts from the transcript
-      for (const item of transcript) {
+      for (const item of data.transcript) {
         transcriptTextParts += item.text;
         // Better code: const transcriptTextParts = transcript.map(item => item.text).join(' ');
       }
