@@ -158,6 +158,8 @@ export async function POST(req: Request) {
         // Better code: const transcriptTextParts = transcript.map(item => item.text).join(' ');
       }
 
+      console.log(transcriptTextParts);
+
       // Get answer from chatgpt
       const response = await client.responses.create({
         model: 'gpt-4o',
