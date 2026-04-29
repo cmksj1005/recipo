@@ -38,11 +38,16 @@ jobs:
           mkdir -p .next/standalone/.next
           cp -r .next/static .next/standalone/.next/static
 
+      - name: Zip standalone package
+        run: |
+          cd .next/standalone
+          zip -r ../../release.zip .
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .next/standalone
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -70,4 +75,4 @@ jobs:
         with:
           app-name: 'recipo-web'
           slot-name: 'Production'
-          package: .
+          package: release.zip
