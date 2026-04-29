@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Recipo 🍳
 
-## Getting Started
+🔗 Live Demo: https://recipo.ca
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Recipo is an AI-powered web application that converts YouTube cooking videos into structured recipes.  
+Users can simply paste a video URL, and the application extracts key information such as the recipe title, ingredients, and step-by-step instructions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project demonstrates my ability to build a full-stack application integrating modern frontend frameworks, backend APIs, and AI services.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Frontend:** Next.js, TypeScript, Tailwind CSS
+- **Backend:** Next.js API Routes
+- **AI Integration:** OpenAI API
+- **Data Processing:** YouTube Transcript Extraction
+- **Deployment:** Microsoft Azure
+- **Version Control:** GitHub
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### AI-Powered Recipe Extraction
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Converts YouTube cooking videos into structured recipes
+- Automatically detects non-cooking content
+- Generates recipe title, ingredients, and instructions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Clean User Interface
 
-## Deploy on Vercel
+- Simple and intuitive input (Google-style search bar)
+- Displays embedded video alongside generated recipe
+- Fast and responsive user experience
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Structured Data Processing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Designed a strict output format for consistent AI responses
+- Transforms unstructured transcript data into clean, readable recipes
+
+### API Integration
+
+- Handles client → server → AI request flow
+- Uses asynchronous processing for efficient data handling
+
+### Error Handling
+
+- Prevents invalid inputs (non-cooking videos)
+- Provides feedback to users when extraction fails
+
+## How It Works
+
+1. User inputs a YouTube video URL
+2. The application extracts the video transcript
+3. The transcript is sent to the OpenAI API
+4. AI processes the content and returns structured data
+5. The frontend displays the recipe and video
+
+## Purpose
+
+The goal of this project is to demonstrate my ability to build a complete, production-ready application that integrates AI with modern web technologies.
