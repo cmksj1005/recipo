@@ -15,7 +15,7 @@ export default function UserGuide() {
               height={70}
               priority
             ></Image>
-            <h2>How to Use Recipo!!!</h2>
+            <h2>How to Use Recipo@@</h2>
           </div>
           <ul>
             <li>
