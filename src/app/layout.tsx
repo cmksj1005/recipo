@@ -12,10 +12,10 @@ const overpass = Overpass({
 
 export const metadata: Metadata = {
   title: 'Recipo',
-  description: 'AI recipe generator from YouTube',
+  description: 'Extract recipes from YouTube cooking videos using AI.',
   openGraph: {
     title: 'Recipo',
-    description: 'AI recipe generator from YouTube',
+    description: 'Extract recipes from YouTube cooking videos using AI.',
     url: 'https://recipo.ca',
     siteName: 'Recipo',
     images: [
@@ -23,8 +23,15 @@ export const metadata: Metadata = {
         url: 'https://recipo.ca/logo.png',
         width: 1200,
         height: 630,
+        alt: 'Recipo logo',
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Recipo',
+    description: 'Extract recipes from YouTube cooking videos using AI.',
+    images: ['https://recipo.ca/logo.png'],
   },
 };
 
