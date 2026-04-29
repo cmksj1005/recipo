@@ -12,8 +12,20 @@ const overpass = Overpass({
 
 export const metadata: Metadata = {
   title: 'Recipo',
-  description:
-    'Recipo transforms YouTube cooking videos into easy-to-follow recipes using AI.',
+  description: 'AI recipe generator from YouTube',
+  openGraph: {
+    title: 'Recipo',
+    description: 'AI recipe generator from YouTube',
+    url: 'https://recipo.ca',
+    siteName: 'Recipo',
+    images: [
+      {
+        url: 'https://recipo.ca/logo.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
