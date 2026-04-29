@@ -102,53 +102,24 @@ export async function POST(req: Request) {
 
     // if the url is valid
     if (checkUrlFormat()) {
-      //To get id from youtube link ex)https://www.youtube.com/watch?v=1EOmjfSAjw0, id = 1EOmjfSAjw0
-      //Got this code from stack overflow(https://stackoverflow.com/questions/33249105/embed-youtube-video-from-url)
-      function getVideoId(urlString: string) {
-        if (urlString && URL.canParse(urlString)) {
-          // shorts URL
-          if (urlString.includes('/shorts/')) {
-            return body.url.split('/shorts/')[1];
-          }
-          // short version URL
-          if (
-            userEnteredUrl.hostname === 'www.youtu.be' ||
-            userEnteredUrl.hostname === 'youtu.be'
-          ) {
-            const videoId: string = userEnteredUrl.pathname.startsWith('/')
-              ? userEnteredUrl.pathname.substring(1)
-              : userEnteredUrl.pathname;
-            return videoId;
-          }
-          // regular version URL
-          const v = userEnteredUrl.searchParams.get('v'); // ex) https://www.youtube.com/watch?v=abc123 / you can get abc123 using this code.
-          if (
-            (userEnteredUrl.hostname === 'www.youtube.com' ||
-              userEnteredUrl.hostname === 'youtube.com') &&
-            v
-          ) {
-            return v;
-          }
-        }
-      }
-
-      const videoId = getVideoId(body.url);
       const videoUrl = body.url;
+
+      // Extract transcript from the youtube video
+      // It returns an array of objects
+      const API_KEY = process.env.TRANSCRIPT_API_KEY;
+      const apiUrl = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoUrl)}&format=json`;
+      const res = await fetch(apiUrl, {
+        headers: { Authorization: 'Bearer ' + API_KEY },
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+
+      const videoId = data.video_id;
 
       // If videoId is undefined, it returns result for invalid url
       if (!videoUrl || !videoId) {
         return Response.json(createRecipeResult({ invalidUrl: true }));
       }
-
-      // Extract transcript from the youtube video
-      // It returns an array of objects
-      const API_KEY = process.env.TRANSCRIPT_API_KEY;
-      const url = `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoUrl)}&format=json`;
-      const res = await fetch(url, {
-        headers: { Authorization: 'Bearer ' + API_KEY },
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
 
       let transcriptTextParts = '';
 
