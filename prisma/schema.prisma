@@ -11,3 +11,34 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Recipe {
+  id           Int                 @id @default(autoincrement())
+  title        String
+  videoUrl     String
+  embedUrl     String?
+  createdAt    DateTime            @default(now())
+
+  ingredients  RecipeIngredient[]
+  instructions RecipeInstruction[]
+}
+
+model RecipeIngredient {
+  id           Int     @id @default(autoincrement())
+  recipeId     Int
+  name         String
+  quantity     Float?
+  unit         String?
+  displayOrder Int
+
+  recipe    Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model RecipeInstruction {
+  id         Int    @id @default(autoincrement())
+  recipeId   Int
+  stepNumber Int
+  content    String
+
+  recipe     Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
