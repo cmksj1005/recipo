@@ -1,17 +1,4 @@
 import type { Metadata } from 'next';
-// import Link from 'next/link';
-// import {
-//   NavigationMenuItem,
-//   NavigationMenuLink,
-//   navigationMenuTriggerStyle,
-// } from '@/components/ui/navigation-menu';
-// import {
-//   ClerkProvider,
-//   Show,
-//   SignInButton,
-//   SignUpButton,
-//   UserButton,
-// } from '@clerk/nextjs';
 import './globals.css';
 import { Overpass, Geist, Geist_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
@@ -79,29 +66,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full flex flex-col`}
       >
-        {/* <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/">Home</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem> */}
-        {/* <ClerkProvider>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <Show when="signed-out">
-              <SignInButton />
-              <SignUpButton mode="redirect">
-                <button className="bg-rose-300 text-white rounded-lg font-medium text-sm sm:text-base h-10 sm:h-8 px-4 sm:px-5 cursor-pointer">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </Show>
-            <Show when="signed-in">
-              <UserButton />
-            </Show>
-          </header> */}
         <Navbar />
         <Logo />
         {children}
-        {/* </ClerkProvider> */}
       </body>
     </html>
   );
