@@ -71,9 +71,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
-      <Logo />
-
       {/* Recipo Searchbar */}
       <Searchbar handleSubmit={handleSubmit} />
 

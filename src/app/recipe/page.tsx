@@ -40,8 +40,6 @@ export default function RecipePage() {
 
   return (
     <>
-      <Logo />
-
       {/* Display result after finishing the process from back-end part */}
       {recipe && <Result data={recipe} />}
 

@@ -15,6 +15,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Overpass, Geist, Geist_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import Logo from '@/components/recipe/Logo';
+import Navbar from '@/components/navigation/Navbar';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -96,6 +98,8 @@ export default function RootLayout({
               <UserButton />
             </Show>
           </header> */}
+        <Navbar />
+        <Logo />
         {children}
         {/* </ClerkProvider> */}
       </body>

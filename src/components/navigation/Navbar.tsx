@@ -10,23 +10,36 @@ import {
 
 export default function Navbar() {
   return (
-    <>
+    <div className={styles.navbarWrapper}>
       <NavigationMenu>
-        <NavigationMenuItem className={styles.Navbar}>
+        <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/">Home</Link>
+            <Link href="/" className={styles.navButton}>
+              <div>Home</div>
+            </Link>
           </NavigationMenuLink>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/">Recipes</Link>
+            <Link href="/" className={styles.navButton}>
+              Recipes
+            </Link>
           </NavigationMenuLink>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/">Test1</Link>
+            <Link href="/" className={styles.navButton}>
+              <div>Best Recipes</div>
+            </Link>
           </NavigationMenuLink>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/">Test2</Link>
+            <Link href="/" className={styles.navButton}>
+              <div>About</div>
+            </Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/" className={styles.navButton}>
+              <div>My Account</div>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenu>
-    </>
+    </div>
   );
 }
