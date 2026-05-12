@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import {
-  NavigationMenuItem,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import {
-  ClerkProvider,
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from '@clerk/nextjs';
+// import Link from 'next/link';
+// import {
+//   NavigationMenuItem,
+//   NavigationMenuLink,
+//   navigationMenuTriggerStyle,
+// } from '@/components/ui/navigation-menu';
+// import {
+//   ClerkProvider,
+//   Show,
+//   SignInButton,
+//   SignUpButton,
+//   UserButton,
+// } from '@clerk/nextjs';
 import './globals.css';
 import { Overpass, Geist, Geist_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
@@ -82,7 +82,7 @@ export default function RootLayout({
             <Link href="/">Home</Link>
           </NavigationMenuLink>
         </NavigationMenuItem> */}
-        <ClerkProvider>
+        {/* <ClerkProvider>
           <header className="flex justify-end items-center p-4 gap-4 h-16">
             <Show when="signed-out">
               <SignInButton />
@@ -95,9 +95,9 @@ export default function RootLayout({
             <Show when="signed-in">
               <UserButton />
             </Show>
-          </header>
-          {children}
-        </ClerkProvider>
+          </header> */}
+        {children}
+        {/* </ClerkProvider> */}
       </body>
     </html>
   );
