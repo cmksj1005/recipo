@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '@/components/buttons/GoHomeButton.module.css';
+import styles from './GoHomeButton.module.css';
 
 export default function GoHomeButton() {
   return (

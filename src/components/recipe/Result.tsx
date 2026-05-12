@@ -1,4 +1,4 @@
-import styles from '@/components/recipe/Result.module.css';
+import styles from './Result.module.css';
 import { ResultProps } from '@/types/recipe';
 
 export default function Result({ data }: ResultProps) {

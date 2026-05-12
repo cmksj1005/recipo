@@ -1,4 +1,4 @@
-import styles from '@/components/recipe/Loading.module.css';
+import styles from './Loading.module.css';
 import Lottie from 'lottie-react'; // to use animation from Lottie Files
 import pizzaLoading from '@/app/animations/prepare-food.json'; // to use animation from Lottie Files
 

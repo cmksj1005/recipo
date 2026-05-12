@@ -1,14 +1,10 @@
-'use client';
-
 import Link from 'next/link';
+import styles from './Navbar.module.css';
 
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 
@@ -16,16 +12,20 @@ export default function Navbar() {
   return (
     <>
       <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <Link href="/">Home</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
+        <NavigationMenuItem className={styles.Navbar}>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/">Home</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/">Recipes</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/">Test1</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/">Test2</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
       </NavigationMenu>
     </>
   );

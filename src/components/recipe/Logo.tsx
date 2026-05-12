@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from '@/components/recipe/Logo.module.css';
+import styles from './Logo.module.css';
 import Link from 'next/link';
 
 export default function Logo() {
