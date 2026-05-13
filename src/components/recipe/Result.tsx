@@ -1,9 +1,12 @@
+import Logo from './Logo';
 import styles from './Result.module.css';
 import { ResultProps } from '@/types/recipe';
 
 export default function Result({ data }: ResultProps) {
   return (
     <>
+      <Logo />
+
       {/* Recipe Video */}
       <div className={styles.VideoWrapper}>
         <iframe

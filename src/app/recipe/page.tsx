@@ -6,7 +6,6 @@
 
 import { useRouter } from 'next/navigation';
 import { RecipeResult } from '@/types/recipe';
-import Logo from '@/components/recipe/Logo';
 import Result from '@/components/recipe/Result';
 import NotificationModal from '@/components/modals/NotificationModal';
 import GoHomeButton from '@/components/buttons/GoHomeButton';

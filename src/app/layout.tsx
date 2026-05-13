@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Overpass, Geist, Geist_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import Logo from '@/components/recipe/Logo';
 import Navbar from '@/components/navigation/Navbar';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -66,9 +66,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full flex flex-col`}
       >
-        <Navbar />
-        <Logo />
-        {children}
+        <ClerkProvider>
+          <Navbar />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
