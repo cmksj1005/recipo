@@ -11,6 +11,7 @@ import {
 import { UserButton, SignUpButton, SignInButton, useAuth } from '@clerk/nextjs';
 
 export default function Navbar() {
+  // useAuth() is a React hook from Clerk that gives you the current authentication state inside a component.
   const { userId, isLoaded } = useAuth();
   return (
     // buttons in NavBar
