@@ -43,3 +43,6 @@ next-env.d.ts
 # api
 .env.local
 /src/generated/prisma
+
+# AI Agent
+CLAUDE.md
