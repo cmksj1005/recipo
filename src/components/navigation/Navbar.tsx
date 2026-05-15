@@ -13,6 +13,7 @@ import { UserButton, SignUpButton, SignInButton, useAuth } from '@clerk/nextjs';
 export default function Navbar() {
   const { userId, isLoaded } = useAuth();
   return (
+    // buttons in NavBar
     <div className={styles.navbarWrapper}>
       <div></div>
       <div className={styles.navMenu}>
@@ -61,8 +62,10 @@ export default function Navbar() {
           </NavigationMenuItem>
         </NavigationMenu>
       </div>
+      {/* Sign in & Sign up in NavBar */}
       <div className={styles.authMenu}>
         <header className="flex justify-end items-center p-4 gap-4 h-full">
+          {/* If Clerk has finished initializing and User is not signed in, display Sign In & Sign Up buttons. */}
           {isLoaded && !userId && (
             <>
               <SignInButton>
@@ -75,6 +78,7 @@ export default function Navbar() {
               </SignUpButton>
             </>
           )}
+          {/* If Clerk has finished initializing and User is signed in, display user button. */}
           {isLoaded && userId && <UserButton />}
         </header>
       </div>

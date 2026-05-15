@@ -13,7 +13,6 @@ import Searchbar from '@/components/recipe/Searchbar';
 import UserGuide from '@/components/recipe/UserGuide';
 import Loading from '@/components/recipe/Loading';
 import NotificationModal from '@/components/modals/NotificationModal';
-import Navbar from '@/components/navigation/Navbar';
 
 export default function Home() {
   const router = useRouter(); // It should be at the top level of the component
