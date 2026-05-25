@@ -22,5 +22,9 @@ export type SearchbarProps = {
 };
 
 export type ResultProps = {
-  data: RecipeResult;
+  recipe: RecipeResult;
+};
+
+export type SaveRecipeButtonProps = {
+  recipe: RecipeResult | null;
 };

@@ -10,6 +10,8 @@ import Result from '@/components/recipe/Result';
 import NotificationModal from '@/components/modals/NotificationModal';
 import GoHomeButton from '@/components/buttons/GoHomeButton';
 import Image from 'next/image';
+import SaveRecipeButton from '@/components/buttons/SaveRecipeButton';
+import styles from './page.module.css';
 
 export default function RecipePage() {
   //get recipe from session storage and display it on the screen
@@ -40,9 +42,12 @@ export default function RecipePage() {
   return (
     <>
       {/* Display result after finishing the process from back-end part */}
-      {recipe && <Result data={recipe} />}
+      {recipe && <Result recipe={recipe} />}
 
-      <GoHomeButton />
+      <div className={styles.buttonsWrapper}>
+        <GoHomeButton />
+        <SaveRecipeButton recipe={recipe} />
+      </div>
 
       {/* If user goes to recipe page without searching, Warning notification will be displayed */}
       <NotificationModal
